@@ -1,0 +1,129 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% include 'snippets/Title.html' %}
+{% endblock %}
+
+{% block content %}
+
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+{% if player.flooded  %} <!--this loop is not easy to fix in the models-->
+   <div class="alert alert-danger" role="alert">In year {{year}}, your house was flooded.</div>
+    {% else  %}
+    <div class="alert alert-success" role="alert">In year {{year}}, your house was not flooded.
+
+    </div>
+    {% endif %}
+
+<div class="card-body" style="margin-left:-50px;">
+<div class="row justify-content-start">
+<div class="col-md-6">
+<div class="row justify-content-end">
+
+    {% for item in items %}
+
+    <!--if item in player.floodnrs-->
+
+   <div class="col-md-1" style="height:60px;">
+                    {% if item|slugify in floodnrs  and item == "012"%}
+       <div class="col-lg-1"  >
+<i class="material-icons blue" style="outline: 1px dashed black;outline-offset: 8px;">home</i>&nbsp;you
+
+       <br> </div>
+                    {% elif item|slugify in floodnrs %}<div class="col-md-1" >
+<i class="material-icons blue">home</i>
+
+       <br> </div>
+
+
+                    {% elif item == "012" %}<div class="col-md-1">
+<i class="material-icons black" style="outline: 1px dashed black;outline-offset: 8px;">home</i>&nbsp;you
+
+<br></div>
+                    {% else %} <div class="col-md-1 " >
+
+<i class="material-icons black">home</i>
+   <br></div>
+                    {% endif %}
+
+
+        {% if forloop.counter|divisibleby:"10" and not forloop.last %}<!-- if last column in row -->
+        </div><div class="w-100">
+        {% endif %}
+</div>
+    {% endfor %}
+
+</div>
+</div>
+<div class="col-md-6">
+<div class="row justify-content-start">
+
+
+    {% for item in items2 %}
+
+    <!--if item in player.floodnrs-->
+
+   <div class="col-md-1" style="height:60px;">
+                    {% if item|slugify in floodnrs %}
+
+       <div class="col-md-1" >
+           <i class="material-icons blue">home</i><br>
+       </div>
+
+                    {% else %}
+
+       <div class="col-md-1" >
+           <i class="material-icons black">home</i><br>
+       </div>
+                    {% endif %}
+
+
+        {% if forloop.counter|divisibleby:"10" and not forloop.last %}<!-- if last column in row -->
+        </div><div class="w-100">
+        {% endif %}
+</div>
+    {% endfor %}
+</div>
+</div>
+</div>
+
+</div>
+
+
+
+
+
+
+<p>
+
+<!--this loop is not easy to fix in the models-->
+{% if player.flooded and player.has_insurance %}
+    Because you have mandatory insurance and your house was flooded, you should pay your deductible (eigen risico).<br> <br>
+    <button name="pay_deductible" value="paid_deductible" class="btn btn-primary btn-right btn-md">Pay {{deductible_ecu_this_scenario}} deductible</button>
+
+{% elif player.flooded and not player.has_insurance %}
+    You did not have insurance and your house was flooded. Please pay the damage. <br> <br>
+    <button name="pay_damage" value="paid_damage" class="btn btn-primary btn-right btn-md">Pay {{reduced_damage_this_scenario}} damage</button>
+
+
+{% elif not player.flooded  %}
+    Because your house was not flooded, you don't have to pay anything. <br> <br>   <button name="next_button" value="no_flood" class="btn btn-primary btn-right btn-md">
+    Go to next year</button>
+
+{% else %}
+    Something went wrong..
+
+    {% endif %}
+
+</p>
+
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+
+{% endblock %}

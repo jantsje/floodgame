@@ -1,0 +1,48 @@
+{% extends "floodgame/Surveypage.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Final questionnaire
+
+{% endblock %}
+
+{% block content %}
+
+<div class="progress">
+  <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+  <span class="sr-only">{{ progress }} % </span>
+  </div>
+</div>
+<br>
+
+
+    We have some more statements for you. To what extent do you agree with the following statements?  <br><br>
+{% for field in form %}
+
+<table class="table table-sm" width=100% class="table">
+    <tr>
+        {%if  forloop.counter  == 1  %}<th> </th><th>Strongly disagree</th><th>Disgree</th><th>Neither agree nor disagree</th><th>Agree</th><th>Strongly agree</th>
+        {% endif %}
+
+    </tr>
+
+    <tr>
+        <td width="50%">
+            {{ field.label }}
+            {{ field.errors }}
+        </td>
+        <td width="10%"><input type="radio" name="{{ field.html_name}}" value="Strongly disagree"></td>
+        <td width="10%"><input type="radio" name="{{ field.html_name}}" value="Disgree"></td>
+        <td width="10%"><input type="radio" name="{{ field.html_name}}" value="Neither agree nor disagree"></td>
+        <td width="10%"><input type="radio" name="{{ field.html_name}}" value="Agree"></td>
+        <td width="10%"><input type="radio" name="{{ field.html_name}}" value="Strongly agree"></td>
+
+    </tr>
+
+</table>
+
+{% endfor %}
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" > Next </button>
+
+{% endblock %}

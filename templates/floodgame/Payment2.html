@@ -1,0 +1,90 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+{% block title %}
+    {{page_title}}
+{% endblock %}
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<!--<img width="100%" src="{% static "floodgame/banner.jpg" %}"/>-->
+
+<div class="card"> <div class="card-body"><p>
+    In the table below you see your payoffs for each of the scenarios.
+
+</p></div></div>
+
+  <table class="table" style="width:70%">
+    <tr>
+        <th>Scenario</th>
+        <th>Savings account</th>
+        <th>Payment on top of participation fee</th>
+    </tr>
+{% if selected_scenario == 1 and selected != None%}
+      <tr  class="bg-success">
+{% else %}
+
+          <tr>{% endif %}
+          <td>Scenario 1</td>
+          <td>{{payoff_scenario1}}</td>
+          <td>{{payoff_small_1}}</td>
+      </tr>
+{% if selected_scenario == 2 and selected != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Scenario 2</td>
+          <td>{{payoff_scenario2}}</td>
+          <td>{{payoff_small_2}}</td>
+      </tr>
+{% if selected_scenario == 3 and selected != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Scenario 3</td>
+          <td>{{payoff_scenario3}}</td>
+          <td>{{payoff_small_3}}</td>
+      </tr>
+{% if selected_scenario == 4 and selected != None %}
+      <tr class="bg-success">
+{% else%}
+
+          <tr>{% endif %}
+          <td>Scenario 4</td>
+          <td>{{payoff_scenario4}}</td>
+          <td>{{payoff_small_4}}</td>
+      </tr>
+{% if selected_scenario == 5 and selected != None %}
+<tr class="bg-success">
+{% else%}
+
+  <tr>{% endif %}
+  <td>Scenario 5</td>
+  <td>{{payoff_scenario5}}</td>
+  <td>{{payoff_small_5}}</td>
+</tr>
+{% if selected_scenario == 6 and selected != None %}
+<tr class="bg-success">
+{% else%}
+
+  <tr>{% endif %}
+  <td>Scenario 6</td>
+  <td>{{payoff_scenario6}}</td>
+  <td>{{payoff_small_6}}</td>
+</tr>
+
+
+
+  </table>
+
+
+<br>
+
+
+<button class="btn btn-primary btn-right btn-lg" >Start with the additional tasks</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+

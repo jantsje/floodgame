@@ -1,0 +1,50 @@
+{% load staticfiles otree_tags %}
+<div class="card">
+<br>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-block px-3">
+                <img width="100%" src="{% static 'floodgame/mitigation.png' %}"/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card-body px3">
+                <p>
+    To protect your house from flood damage, you can invest in <strong>protective measures</strong> for reducing flood risk of your virtual home.
+    These will not change the probability of a flood, but will <strong>reduce the damage if it occurs</strong>.
+                </p>
+            <p>  For example, moving your electric appliances to the first floor is such a measure that reduces flood damage.
+            </p>
+                <p> You can choose how much you want to invest. A larger investment will lead to more damage reduction.
+    {% if player.has_discount %}
+                In addition, your <b>premium will be lowered </b> based on the damage reduction of your investment. </p>
+                {% else %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card">
+<br>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card-body">
+                <p>Flood protection measures are costly. During the game we will offer you a loan to spread the investment costs. </p>
+                <p>If you decide to invest, you will get a loan. Your <strong><span style="color:red;">loan</span></strong>
+                    is always displayed next to your <strong><span style="color:#007bff;">savings</span></strong> account.</p>
+                <p>You will pay a loan cost each year, for {{installments}} years (until the loan is repaid).
+                    The loan cost includes a <strong>{{interest}} percent</strong> interest. In case the loan is not
+                    fully repaid in the last year, you will pay the final loan cost then.</p>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card-body">
+                <i class=" material-icons black" style="font-size:9em;" class="w-100">build</i>
+            </div>
+        </div>
+    </div>
+</div>

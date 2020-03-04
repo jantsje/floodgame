@@ -1,0 +1,90 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+
+
+
+<div class="card"> <div class="card-body"><p>
+    The decisions you made between <b>payment now</b> and a <b>payment in a year from now</b> are listed below.
+    The randomly selected scenario is highlighted in green.
+
+</p><p> In case you are selected for payment and this scenario is selected, you will be paid
+    <b>&euro;{{payoff_time}}{% if payoff_time == "100" %} now{%else %} in 12 months {% endif %}</b>.
+    Note that each participant has an equal chance of being selected for large payment. The computer will randomly select this person.
+</p></div></div>
+
+
+<div align="middle">
+    <table   style="width:40%" class="table table-sm table-striped">
+        <colgroup>
+            <col width="30%">
+            <col width="10%">
+            <col width="15%">
+            <col width="50%">
+        </colgroup>
+        <tr >
+            <th style="text-align:center; border-right:1px solid #000;border-bottom:1px solid #000" colspan="2"><h5>Option A</h5></th>
+            <th style="text-align:center; border-bottom:1px solid #000" colspan="2"><h5>Option B</h5></th>
+        </tr>
+
+        {% for amount in Constants.right_side_amounts_time %}
+
+                {% if selected_scenario == amount %}
+        <tr class="bg-success" align="left">
+                {% else %}
+        <tr>
+                {% endif %}
+
+                <td align="middle">
+                    {% if amount >= player.switching_point_time %}
+                    <span style="color:lightgray;"><b>&euro;{{player.left_side_time }} </b> now</span>
+                    {% else %}
+                    <b>&euro;{{ player.left_side_time }} </b> now
+                    {% endif%}
+
+
+
+                <td align="middle" style="border-right:1px solid #000;">
+                <td align="middle">
+                <td align="left">
+
+                    {% if amount < player.switching_point_time %}
+                    <span style="color:lightgray;"><b>&euro;{{ amount }}</b> in 12 months</span>
+                    {% else %}
+                    <b>&euro;{{ amount }}</b> in 12 months
+                    {% endif%}
+
+
+
+
+
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+</div>
+    {{ form.errors }}
+    <input type="hidden" name="switching_point_time" id="id_switching_point"
+           value="9999">
+
+
+
+
+
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" > Next </button>
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}

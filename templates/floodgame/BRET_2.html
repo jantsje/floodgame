@@ -1,0 +1,42 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+{% load i18n %}
+
+{% block title %}
+    {{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+    {% if bomb_BRET %}
+<div class="card"> <div class="card-body alert-danger"><p>
+
+<div class="card"> <div class="card-body alert-danger"><p>
+
+    {% else %}
+<div class="card"> <div class="card-body alert-success"><p>
+
+
+    {% endif %}
+
+
+            {% if bomb_BRET %}
+                {% blocktrans trimmed %}
+        <b>The bomb was among your {{ boxes_collected_BRET }} collected boxes.</b><br><br>
+        Accordingly, all your earnings in this task were destroyed and your payoff for the additional task thus: <b>&euro;{{ payoff_BRET }}</b>.
+                {% endblocktrans %}
+            {% else %}
+                {% blocktrans trimmed %}
+        Your collected boxes <b>did not contain the bomb</b>.<br><br>
+        Thus, you receive &euro;{{ box_value_BRET }} for each of the <b>{{ boxes_collected_BRET }}</b> boxes
+                    you collected. <br>  Your payoff for the additional task thus:<b>&euro;{{ payoff_BRET }}</b>.
+                {% endblocktrans %}
+            {% endif %}
+</p></div></div>
+{% include 'snippets/InstructionsCounter.html' %}
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" > Next </button>
+
+{% endblock %}

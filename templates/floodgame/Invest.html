@@ -1,0 +1,127 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{% include 'snippets/Title.html' %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+<div class="row">
+<div class="col-3">
+    <div class="card" style="text-align:center;">  </p><p>
+        {% include 'snippets/Riskblock.html' %}
+        <div class="card-text">
+            <h5 class="card-title">Each year the flood risk is <span style="color:#007bff;">{{risk}} percent </span> </h5>
+        </div>
+    </div>
+</div>
+        {% include 'snippets/Damageblock.html' %}
+        {% include 'snippets/Insuranceblock.html' %}
+</div>
+<div class="alert alert-light" role="alert"></div>
+
+<div class="alert alert-dark" role="alert">
+<h5><b> How much do you want to invest to reduce the flood damage in the coming years of this scenario?
+</b></h5>
+</div>
+
+<div class="card-group">
+
+<div class="card" style="text-align:center;">
+    <button name="mitigate" value=0 class="btn btn-primary btn-lg btn-block">
+        <i class="material-icons white">build</i>&nbsp;
+
+        {{mitigation_cost0}} </button> <p class="card-text">
+    {% if player.has_discount %}
+           premium is {{premium_discounted0}}
+    {% endif %}
+
+    no investment now: accept damage of {{Constants.damage}}
+
+    {% if player.has_insurance %} <p> you pay {{reduced_deductible0}} <br> deductible if flooded </p>
+    {% else %}
+    {% endif %}
+</p>
+
+</div>
+
+{%if not player.has_insurance %}
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" ><i class="material-icons white">build</i>
+    &nbsp;{{mitigation_cost1}} </button><p class="card-text"> reduce damage to <br>  {{reduced_damage1}}</p></div>
+<div class=card" style="text-align:center;">
+<button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>
+    &nbsp;{{mitigation_cost2}} </button><p class="card-text"> reduce damage to <br> {{reduced_damage2}} <br></p></div>
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>
+    &nbsp;{{mitigation_cost3}} </button><p class="card-text"> reduce damage to <br> {{reduced_damage3}} <br></p></div>
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>
+    &nbsp;{{mitigation_cost4}} </button><p class="card-text"> reduce damage to <br>  {{reduced_damage4}} <br></p></div>
+</div>
+{% else %}
+
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" ><i class="material-icons white">build</i>&nbsp;
+    {{mitigation_cost1}} </button><p class="card-text">
+    {% if player.has_discount and player.has_loan%}
+        pay {{installment1}} / year <br> until loan is repaid  </p><p>
+        lower premium to <br> {{premium_discounted1}} / year </p><p>
+    {% elif player.has_discount %}
+        lower premium to <br> {{premium_discounted1}} / year  </p><p>
+    {% elif player.has_loan %}
+        pay {{installment1}} / year <br> until loan is repaid  </p><p>
+    {% endif %}reduce damage to <br> {{reduced_damage1}}   </p><p> you pay {{reduced_deductible1}} <br>deductible if flooded</p>
+    </div>
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>&nbsp;
+    {{mitigation_cost2}} </button><p class="card-text">
+    {% if player.has_discount and player.has_loan%}
+        pay {{installment2}} / year <br> until loan is repaid  </p><p>
+        lower premium to <br> {{premium_discounted2}} / year </p><p>
+    {% elif player.has_discount %}
+        lower premium to <br> {{premium_discounted2}} / year </p><p>
+    {% elif player.has_loan %}
+        pay {{installment2}} / year <br> until loan is repaid  </p><p>
+    {% endif %}reduce damage to <br> {{reduced_damage2}}   </p><p> you pay {{reduced_deductible2}} <br>deductible if flooded</p>
+
+    </div>
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>&nbsp;
+    {{mitigation_cost3}} </button><p class="card-text">
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment3}} / year <br> until loan is repaid  </p><p>
+        lower premium to <br> {{premium_discounted3}} / year </p><p>
+    {% elif player.has_discount %}
+        lower premium to <br> {{premium_discounted3}} / year </p><p>
+    {% elif player.has_loan  %}
+        pay {{installment3}} / year <br> until loan is repaid  </p><p>
+    {% endif %}reduce damage to <br> {{reduced_damage3}}   </p><p> you pay {{reduced_deductible3}} <br>deductible if flooded</p>
+
+    </div>
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block"><i class="material-icons white">build</i>&nbsp;
+    {{mitigation_cost4}} </button><p class="card-text">
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment4}} / year <br> until loan is repaid  </p><p>
+        lower premium to <br> {{premium_discounted4}} / year </p><p>
+    {% elif player.has_discount %}
+        lower premium to <br> {{premium_discounted4}} / year </p><p>
+    {% elif player.has_loan%}
+        pay {{installment4}} / year <br> until loan is repaid  </p><p>
+    {% endif %}reduce damage to <br> {{reduced_damage4}}   </p><p> you pay {{reduced_deductible4}} <br>deductible if flooded</p>
+    </div>
+</div>
+
+{% endif %}
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+
+{% endblock %}

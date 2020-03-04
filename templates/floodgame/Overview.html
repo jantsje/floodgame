@@ -1,0 +1,70 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    {{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+
+<div class="card"> <div class="card-body"><p>
+
+This experiment consists of 4 parts. The main task is an investment game for homeowners.
+        In this game we assume you are a <b>homeowner</b>.
+        Therefore, to buy a virtual house, you will first earn some experimental currency units (ECU) in a separate task.
+</p><p>Below, you find an overview of all tasks in this experiment:
+</p>
+
+    <table class="table table-sm table-borderless"  style="width:60%">
+        <tr>
+            <td><h5>Task</h5></td>
+            <td><h5>Payoff</h5></td>
+</tr>
+       <tr>
+           <td>Collect money task </td>
+           <td> ECU to buy house </td>
+       </tr>
+
+        <tr>
+            <td> Investment game </td>
+            <td> &euro;0 - &euro;7 depending on your decisions and luck</td></tr>
+
+        <tr>
+            <td> Additional tasks </td>
+            <td> &euro;0 - &euro;5 depending on your decisions and luck</td></tr>
+
+                <tr>
+            <td> Survey </td>
+            <td> {{participation_fee}} participation fee </td></tr>
+
+                <tr>
+            <td><strong> Total payoff</strong></td>
+            <td><strong>&euro;7.00 - &euro;19.00 depending on your decisions and luck</strong></td>
+       </tr>
+    </table>
+
+
+</div>
+</div>
+
+<div class="card alert-info" role="alert" ><div class="card-body"><p>
+    <p> In addition, a random device will pick <b>one participant</b> and one question of this experiment for extra payment.
+        This can be 1 of the 6 scenarios of the investment game, or one of the additional tasks that follow later.
+
+</p><p> In case a scenario is selected, we will pay the selected participant the savings account at the end of
+       that scenario  (200 ECU = &euro;1).
+    That may be <strong>up to &euro;700</strong> depending on your decisions in the game.</p></div></div>
+     </div>
+
+<br>
+<button class="btn btn-primary btn-right btn-lg">Start the collect money task</button>
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+

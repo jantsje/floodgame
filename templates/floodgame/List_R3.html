@@ -1,0 +1,140 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<span style="text-align:center">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <br><br>
+        <h4><strong>Attention!</strong> This task is unrelated to the previous task.</h4>
+         <br> <br>
+<h5> This is the start of 3 additional tasks. You will be paid for <strong>one</strong> of these three tasks.<br>
+Note that the tasks are independent of each other.</h5>
+         <br><br>
+         <br><br><br>
+         <br><br><br>
+         <br>
+            <button class="btn btn-default text-center" data-dismiss="alert" aria-label="Close">Close this window to start the first task</button>
+            <br><br> <br><br>
+
+<br><br><br><br>
+<br><br><br><br>
+
+<br><br><br><br>
+     </div>
+</span>
+<div class="card"> <div class="card-body"><p>
+    For each of the rows below we ask you to choose between two <b>lotteries</b>: option A or option B. Please select the option you prefer.
+    You can only switch once from option A to option B.
+
+</p><p><strong>For this task you are endowed with &euro;{{Constants.endowment_loss_str}}. </strong> As the payoffs are negative,
+    <strong>we will subtract the outcome </strong> of a randomly selected row from that endowment.
+
+</p></div></div>
+
+
+{#<div align="middle">#}
+    <table  style="width:100%" class="table table-sm table-striped">
+        <tr >
+            <th style="text-align:center; border-right:1px solid #000;border-bottom:1px solid #000" colspan="5"><h5>Option A</h5></th>
+            <th style="text-align:center; border-bottom:1px solid #000" colspan="5"><h5>Option B</h5></th>
+        </tr>
+        {% for amount in vars_for_risk3 %}
+            <tr>
+                <td align="left"> 50% chance of
+                <td align="left"><b> <span style="color:red;">&euro;{{ amount.0 }}</span> </b>
+                <td align="left"> and 50% chance of
+                <td align="left"> <b> <span style="color:red;">&euro; {{ amount.1 }}</span></b>
+                <td align="left" style="border-right:1px solid #000">
+                    <input type="radio"
+                           value="left"
+                           name="{{ forloop.counter |json }}"
+                           required>&nbsp;&nbsp;</td>
+                <td align="middle" >
+                    <input type="radio"
+                           name="{{ forloop.counter |json }}"
+                           value="right" data-amount="{{ forloop.counter |json }}"
+                           required>
+                </td>
+                <td align="left"> 50% chance of
+                <td align="left"><b><span style="color:red;">&euro; {{ amount.2 }}</span> </b>
+                <td align="left"> and 50% chance of
+                <td align="left"> <b> <span style="color:red;">&euro;{{ amount.3 }}</span> </b>
+            </tr>
+        {% endfor %}
+    </table>
+{#</div>#}
+
+
+    {{ form.errors }}
+    <input type="hidden" name="switching_point_risk2" id="id_switching_point"
+           value="99">
+
+
+
+
+
+
+    <button class="btn btn-primary btn-lg" name="selected" value="selected">Next</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+
+
+
+{% block scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $('input[type=radio]').change(
+                function () {
+                    var clickedRadio = this;
+                    var afterClickedRadio = false;
+
+
+                    var radios = document.querySelectorAll('input[type=radio]');
+                    for (i = 0; i < radios.length; ++i) {
+                        var radio = radios[i];
+                        if (radio === clickedRadio) {
+                            afterClickedRadio = true;
+                            continue;
+                        }
+                        if (!afterClickedRadio && clickedRadio.value === 'left' && radio.value === 'left') {
+                            radio.checked = true;
+                        }
+                        if (afterClickedRadio && clickedRadio.value === 'right' && radio.value === 'right') {
+                            radio.checked = true;
+                        }
+                    }
+                }
+            );
+
+            <!-- rename the selector when class names are stabilized -->
+            $('button').click(function () {
+                var radios = document.querySelectorAll('input[type=radio]');
+
+
+                for (i = 0; i < radios.length; ++i) {
+                    var radio = radios[i];
+                    if (radio.value === 'right' && radio.checked) {
+                        $('#id_switching_point').val(radio.dataset.amount);
+                        break;
+                    } else {
+                        $('#id_switching_point').val(10);
+                    }
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
+

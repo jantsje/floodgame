@@ -1,0 +1,37 @@
+{% load staticfiles otree_tags %}
+    <div class="card">
+    <br>
+      <div class="row">
+        <div class="col-md-3 text-right">
+            <div class="card-body">
+            <img class="card-img-top" src="{% static 'floodgame/flooded.png' %}"/>
+            </div>
+          </div>
+          <div class="col-md-8 px-3">
+            <div class="card-body px-3">
+                <p class="card-text">Congratulations! For the duration of the following game, you now own a virtual house. <strong>Your house is prone to flooding.</strong></p>
+              <p class="card-text">The risk of getting flooded may change when you move throughout the game, <strong> but it does NOT change due to flood(s) in the past</strong>.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="card">
+    <br>
+    <div class="row">
+        <div class="col-md-6 px-3">
+                        <div class="card-body px-3">
+                            <p class="card-text">If the flood risk is {{risk}} percent, it means that <strong> each year </strong>
+                                {{risk}} out of 100 houses will be flooded.</p>
+                            <p class="card-text"> This grid, for example, represents a <strong> {{risk}} percent </strong>
+                                flood probability in which {{risk}} houses are flooded (blue). </p>
+                        </div>
+        </div>
+        <div class="col-md-5">
+        {% include 'snippets/Riskblock.html' %}<br>
+            <small class="text-muted">The computer randomly picks the house(s) that will be flooded.</small>
+        </div>
+    </div>
+</div>
+

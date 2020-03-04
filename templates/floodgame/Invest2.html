@@ -1,0 +1,300 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% include 'snippets/Title.html' %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+<div class="row">
+<div class="col-3">
+    <div class="card" style="text-align:center;"> <br><br>
+        {% include 'snippets/Riskblock.html' %}
+        <div class="card-body">
+            <h5 class="card-title">Each year the flood risk is <span style="color:#007bff;">{{risk}} percent </span> </h5>
+        </div>
+    </div>
+</div>
+        {% include 'snippets/Damageblock.html' %}
+        {% include 'snippets/Insuranceblock.html' %}
+</div>
+
+<div class="alert alert-light" role="alert"></div>
+
+<div class="alert alert-dark" role="alert">
+{% if mitigation_cost_this_scenario == mitigation_cost4 %}
+    <h5> You have already invested the maximum amount. Please click on your investment to proceed. </h5>
+{% else %}
+    <h5> Would you like to invest <strong>more</strong> in flood risk protection than the <strong>{{mitigation_cost_this_scenario}}</strong> you have invested so far?</h5>
+{% endif %}
+</div>
+
+<div class="card-group">
+{% if mitigation_cost_this_scenario > mitigation_cost0 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost0 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=0 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="no investment now" > No </button><p>
+        {% if player.has_discount %}
+            premium is <br> {{premium_discounted0}} / year <br><br>
+    {% endif %}
+
+    {% if player.has_insurance %} no investment now: accept <br> damage of {{Constants.damage}}
+
+ <br> <br>  you pay {{reduced_deductible0}}<br> deductible if flooded
+    {% else %} no investment now: accept <br> damage of {{Constants.damage}}
+    {% endif %}
+</p>
+
+</div>
+
+
+{% else%}
+<div class="card" style="text-align:center;">
+    <button name="mitigate" value=0 class="btn btn-primary btn-lg btn-block">  {{mitigation_cost0}} </button>
+       {% if player.has_discount %}
+            premium is <br> {{premium_discounted0}} / year <br><br>
+    {% endif %}
+    {% if player.has_insurance %} no investment now: accept <br> damage of {{Constants.damage}}
+
+ <br> <br>  you pay {{reduced_deductible0}}<br> deductible if flooded
+    {% else %} <br><br>no investment now: accept <br> damage of {{Constants.damage}}
+    {% endif %}
+
+
+</div>
+{%endif%}
+{%if not player.has_insurance %}
+
+
+{% if mitigation_cost_this_scenario > mitigation_cost1 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost1 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost1}}" > No </button><p>
+    damage is reduced to<br> {{reduced_damage1}}
+    </p></div>
+ {%else%}
+    <div class="card" style="text-align:center;">
+<button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost1}}" > {{difference1}} </button><p>
+    damage is reduced to<br> {{reduced_damage1}}
+    </p></div>
+{%endif%}
+
+{% if mitigation_cost_this_scenario > mitigation_cost2 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost2 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost2}}" > No </button><p>
+    damage is reduced to<br>{{reduced_damage2}}
+    </p></div>
+ {%else%}
+    <div class="card" style="text-align:center;">
+<button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost2}}" > {{difference2}} </button><p>
+    damage is reduced to<br> {{reduced_damage2}}
+    </p></div>
+{%endif%}
+
+{% if mitigation_cost_this_scenario > mitigation_cost3 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost3 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost3}}" > No </button><p>
+    damage is reduced to<br> {{reduced_damage3}}
+    </p></div>
+ {%else%}
+    <div class="card" style="text-align:center;">
+<button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost3}}" > {{difference3}} </button><p>
+    damage is reduced to <br> {{reduced_damage3}}
+    </p></div>
+{%endif%}
+
+{% if mitigation_cost_this_scenario > mitigation_cost4 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost4 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="you have invested the maximum" > 0 ECU </button><p>
+    damage is reduced to<br> {{reduced_damage4}}
+    </p></div>
+ {%else%}
+    <div class="card" style="text-align:center;">
+<button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost4}}" > {{difference4}} </button><p>
+    reduce damage to<br> {{reduced_damage4}}
+    </p></div>
+{%endif%}
+
+
+
+
+
+
+{% else %}
+
+
+
+{% if mitigation_cost_this_scenario > mitigation_cost1 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost1 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost1}}" > No </button><p>
+    {% if player.has_discount and player.has_loan and loan == 0 %}
+        your loan is repaid <br><br>
+        premium is lowered to <br> {{premium_discounted1}} / year <br><br>
+    {% elif player.has_discount and player.has_loan %}
+        pay {{installment1}} / year <br> until loan is repaid <br> <br>
+        premium is lowered too <br> {{premium_discounted1}} / year <br><br>
+    {% elif player.has_discount %}
+        premium is lowered to <br> {{premium_discounted1}} / year <br><br>
+    {% elif player.has_loan and loan > 0%}
+        pay {{installment1}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}damage is reduced to<br> {{reduced_damage1}}  <br><br> you pay {{reduced_deductible1}} <br>deductible if flooded</p>
+
+    </div>
+ {%else%}
+    <div class="card" style="text-align:center;">
+<button name="mitigate" value=1 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost1}}" > {{difference1}} </button><p>
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment1}} / year <br> until loan is repaid <br>
+        lower premium to <br> {{premium_discounted1}} / year <br><br>
+    {% elif player.has_discount %}
+         lower premium to <br> {{premium_discounted1}} / year <br><br>
+    {% elif player.has_loan%}
+        pay {{installment1}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}reduce damage to<br> {{reduced_damage1}}  <br><br> you pay {{reduced_deductible1}} <br>deductible if flooded</p>
+
+    </div>
+
+   {%endif%}
+
+{% if mitigation_cost_this_scenario > mitigation_cost2 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost2 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost2}}" > No </button><p>
+    {% if player.has_discount and player.has_loan and loan == 0 %}
+        your loan is repaid <br><br>
+         premium is lowered to <br> {{premium_discounted2}} / year <br><br>
+
+    {% elif player.has_discount and player.has_loan %}
+        pay {{installment2}} / year <br> until loan is repaid <br><br>
+         premium is lowered to <br> {{premium_discounted2}} / year <br><br>
+
+    {% elif player.has_discount  %}
+        premium is lowered to <br> {{premium_discounted2}} / year <br><br>
+
+    {% elif player.has_loan  %}
+        pay {{installment2}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}damage is reduced to<br> {{reduced_damage2}}  <br><br> you pay {{reduced_deductible2}} <br>deductible if flooded</p>
+
+    </div>
+{% else%}
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=2 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost2}}" > {{difference2}} </button><p>
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment2}} / year <br> until loan is repaid <br>
+        <br>lower premium to <br> {{premium_discounted2}} / year <br><br>
+
+    {% elif player.has_discount  %}
+        lower premium to <br> {{premium_discounted2}} / year <br><br>
+
+    {% elif player.has_loan  %}
+        pay {{installment2}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}reduce damage to<br> {{reduced_damage2}}  <br><br> you pay {{reduced_deductible2}} <br>deductible if flooded</p>
+    </div>
+{% endif %}
+{% if mitigation_cost_this_scenario > mitigation_cost3 %}
+<div class="card" style="text-align:center;"> </div>
+{% elif mitigation_cost_this_scenario == mitigation_cost3 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost3}}" > No </button><p>
+    {% if player.has_discount and player.has_loan and loan == 0 %}
+        your loan is repaid <br><br>
+         premium is lowered to <br> {{premium_discounted3}} / year <br><br>
+
+    {% elif player.has_discount and player.has_loan %}
+        pay {{installment3}} / year <br> until loan is repaid <br><br>
+        premium is lowered to <br> {{premium_discounted3}} / year <br><br>
+
+    {% elif player.has_discount  %}
+        premium is lowered to <br> {{premium_discounted3}} / year <br><br>
+
+    {% elif player.has_loan  %}
+        pay {{installment3}} / year <br> until loan is repaid <br><br>
+
+     {% endif %}damage is reduced to<br> {{reduced_damage3}}  <br><br> you pay {{reduced_deductible3}} <br>deductible if flooded</p>
+
+    </div>
+{% else%}
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=3 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost3}}" > {{difference3}} </button><p>
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment3}} / year <br> until loan is repaid <br>
+        <br>lower premium to <br> {{premium_discounted3}} / year <br><br>
+
+    {% elif player.has_discount  %}
+        lower premium to <br> {{premium_discounted3}} / year <br><br>
+
+    {% elif player.has_loan  %}
+        pay {{installment3}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}reduce damage to<br> {{reduced_damage3}}  <br><br> you pay {{reduced_deductible3}} <br>deductible if flooded</p>
+
+    </div>
+{% endif %}
+{% if mitigation_cost_this_scenario == mitigation_cost4 %}
+<div class="card" style="text-align:center;background:#F5F5F5">
+    <button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="you have invested the maximum" > 0 ECU </button><p>
+    {% if player.has_discount and player.has_loan and loan == 0 %}
+        your loan is repaid <br><br>
+         premium is lowered to <br> {{premium_discounted4}} / year <br><br>
+    {% elif player.has_discount and player.has_loan %}
+        pay {{installment4}} / year <br> until loan is repaid <br><br>
+        premium is lowered to <br> {{premium_discounted4}} / year <br><br>
+
+    {% elif player.has_discount %}
+        premium is lowered to <br> {{premium_discounted4}} / year <br><br>
+
+    {% elif player.has_loan %}
+        pay {{installment4}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}damage is reduced to<br> {{reduced_damage4}}  <br><br> you pay {{reduced_deductible4}} <br>deductible if flooded</p>
+    </div>
+
+
+
+{%else%}
+<div class="card" style="text-align:center;">
+<button name="mitigate" value=4 class="btn btn-primary btn-lg btn-block" data-toggle="tooltip" data-placement="top" title="total investment {{mitigation_cost4}}" > {{difference4}} </button><p>
+    {% if player.has_discount and player.has_loan %}
+        pay {{installment4}} / year <br> until loan is repaid <br>
+        <br>lower premium to <br> {{premium_discounted4}} / year <br><br>
+
+    {% elif player.has_discount  %}
+        lower premium to <br> {{premium_discounted4}} / year <br><br>
+
+    {% elif player.has_loan  %}
+        pay {{installment4}} / year <br> until loan is repaid <br><br>
+
+    {% endif %}reduce damage to<br> {{reduced_damage4}}  <br><br> you pay {{reduced_deductible4}} <br>deductible if flooded</p>
+    </div>
+
+
+{% endif %}{%endif%}
+
+
+</div>
+<!--to get the debug stuff low enough such that it is readable-->
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+
+{% endblock %}

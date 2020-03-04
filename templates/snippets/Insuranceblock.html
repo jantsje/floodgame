@@ -1,0 +1,34 @@
+{% load staticfiles otree_tags %}
+<div class="col-6">
+    <div class="card" style="text-align:center;">
+        <div class="card-body">
+        {% if not player.has_insurance%}
+
+<i class="material-icons black" style="font-size:6em">business_center</i>
+           <h5 class="card-text">
+
+           You have <span style="color:#007bff;"> no insurance </span> against floods</h5>
+        <small class="text-muted">In case of a flood you have to pay the <strong>full damage
+        </strong> from your savings.</small>
+
+        {% elif player.has_insurance%}
+
+            {%if player.level_deductible == 2 %}
+                <img width="100%" src="{% static 'floodgame/deductible_high.png' %}"/>
+            {%elif player.level_deductible == 1 %}
+                <img width="100%" src="{% static 'floodgame/deductible_low.png' %}"/>
+            {%else%}
+                <img width="100%" src="{% static 'floodgame/deductible5.png' %}"/>
+            {%endif%}
+                <div class="caption">
+                <h5>
+                You have <span style="color:#007bff;"> mandatory insurance </span> against floods</h5>
+                In exchange for a premium of <span style="color:#007bff;">{{premium}} each year, </span>  the <br>insurance company pays part of your damage in case of a flood.
+
+        {% endif %}
+
+      </div>
+    </div>
+
+</div>
+</div>

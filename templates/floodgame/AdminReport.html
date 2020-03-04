@@ -1,0 +1,42 @@
+
+
+
+<table class="table table-striped">
+
+        <tr>
+            <th>Pp code</th>
+            <th>Treatment</th>
+            <th>Scenario1</th>
+            <th>Scenario2</th>
+            <th>Scenario3</th>
+            <th>Scenario4</th>
+            <th>Scenario5</th>
+            <th>Scenario6</th>
+            <th>Time</th>
+            <th>Risk</th>
+            <th>BRET</th>
+            <th>Payoff</th>
+            <th>Prize</th>
+        </tr>
+    {% for item in vars_admin_list %}
+        <tr>
+            <td style="font-family: 'Courier New'"> {{item.0}} </td>
+            <td> {{item.1}} </td>
+            <td> {{item.2}} </td>
+            <td> {{item.3}} </td>
+            <td> {{item.4}} </td>
+            <td> {{item.5}} </td>
+            <td> {{item.6}} </td>
+            <td> {{item.7}} </td>
+            <td> {{item.8}} </td>
+            <td> {{item.9}} </td>
+            <td> {{item.10}} </td>
+            <td> {{item.11}} </td>
+            <td> {{item.12}} </td>
+        </tr>
+
+    {% endfor %}
+
+</table>
+
+

@@ -1,0 +1,147 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block global_styles %}
+<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+   rel="stylesheet">
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:1000px;">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+          <h5 class="modal-title">Instructions </h5>
+
+        <button type="button" class="close" id=instructionsButton data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+<div class="card-deck">
+{% include 'snippets/Instr1.html' %}
+{% include 'snippets/Instr2.html' %}
+          {% if player.has_loan %}
+             {% include 'snippets/Instr2a.html' %}
+          {% endif %}
+{% include 'snippets/Instr3.html' %}
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <style>
+
+.otree-body {max-width:1000px
+    }
+
+    .col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 22x;
+    padding-left: 22px;
+}
+
+.col-md-1 {
+    max-width: 9%;
+
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+.btn-right {
+float: right !important;
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
+    url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
+    url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+.material-icons.black { color: #000000; font-size:2em; }
+.material-icons.blue { color: #007bff; font-size:2em;}
+.material-icons.white { color: #ffffff; font-size:1em;}
+
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+
+    </style>
+
+{% endblock %}
+
+
+{% block app_scripts %}
+
+<script type ="text/css" data-require="bootstrap@*" data-semver="3.3.2" src="{% static 'floodgame/bootstrap/js/bootstrap.min.js'%}"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+
+<script>
+
+$(document).ready(function() {
+    $("body").tooltip({ selector: '[data-toggle=tooltip]' });
+});
+</script>
+
+
+{% endblock %}

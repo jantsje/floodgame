@@ -1,0 +1,41 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+
+<img width="100%" src="{% static 'floodgame/banner.jpg' %}"/>
+
+<br> <br>
+
+ We invite you to participate in an experiment that is part of a research project undertaken by the Institute for Environmental Studies (IVM),
+Vrije Universiteit (VU) Amsterdam and funded by the Netherlands Organisation for Scientific Research (NWO).
+    The experiment is about your views on flood protection investments.
+<br> <br>
+
+   <div class="alert alert-info" role="alert"><h6>
+You will earn <strong>between &euro;7 and &euro;19</strong> in this experiment, depending on the choices you make and some luck.
+<br>
+
+       On top of that, you have the chance to earn <strong>up to &euro;700</strong> based on your decisions.
+<strong> <br><br>It is therefore in your best interest to read the instructions carefully.</strong></h6></div>
+
+
+<br> <br>
+
+<button class="btn btn-primary btn-right btn-lg">Next</button>
+
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+

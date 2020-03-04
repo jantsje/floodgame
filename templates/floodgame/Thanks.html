@@ -1,0 +1,23 @@
+{% extends "floodgame/Surveypage.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Thanks for your participation
+<br></br>
+<div class="progress">
+  <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+  <span class="sr-only">{{ progress }} % </span>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="alert alert-success" role="alert">
+Thank you! Please wait until the experimenter comes by to arrange your payment.
+
+</div>
+
+
+{% endblock %}

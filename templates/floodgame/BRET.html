@@ -1,0 +1,270 @@
+{% extends "global/Base.html" %}
+{% load otree %}
+{% load i18n %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+    <link href="{% static 'bret_BRET/css/bret.css' %}" rel="stylesheet"/>
+    <style type="text/css">.ng-cloak{display:none !important;}</style>
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+   rel="stylesheet">
+
+
+    <script src="{% static 'bret_BRET/js/angular.min.js' %}"></script>
+    <script src="{% static 'bret_BRET/js/bret.js' %}"></script>
+    <script>(function(angular){
+        try{
+            // get bomb task module
+            angular.module("bombTask")
+            // card size properties
+            .constant("WIDTH",{{ box_width|json }})
+            .constant("HEIGHT",{{ box_height|json }})
+            // matrix size properties
+            .constant("NUM_ROWS",{{ num_rows|json}})
+            .constant("NUM_COLS",{{ num_cols|json}})
+            // dynamic mode properties
+            .constant("RANDOM",{{ random|json}})
+            .constant("DYNAMIC",{{ dynamic|json }})
+            .constant("INTERVAL",{{ time_interval|json }})
+            // visibility properties
+            .constant("FEEDBACK",{{ feedback|json }})
+            // behaviour properties
+            .constant("UNDOABLE",{{ undoable|json }})
+            .constant("INPUT",{{ input|json }})
+            .constant("RESET",{{ reset|json }});
+
+
+        } catch(e){ console.error("Could not pass server-side settings to bomb task app!");}
+    })(angular);
+    </script>
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+
+
+{% block content %}
+{% include 'snippets/Progressbar.html' %}
+
+
+<span style="text-align:center">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <br><br>
+        <h4><strong>Attention! </strong> This task is independent of the previous task.</h4>
+         <br><br>
+         <br><br><br>
+         <br><br><br>
+         <br>
+            <button class="btn btn-default text-center" data-dismiss="alert" aria-label="Close">Close this window to start the task</button>
+            <br><br> <br><br>
+
+<br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+
+<br><br><br><br>
+     </div>
+</span>
+
+
+<div class="card">
+    <div class="card-body">
+        <p>Below you see 100 boxes. All but one of these boxes contain money. <b>One</b> box contains a bomb.
+            </p><p>You have to choose how many boxes you want to open. Your payoff is <b>&euro;{{box_value_BRET}}</b>
+        per opened box, but it is <b>&euro;0 if one of the opened boxes contains the bomb.</b>
+        You cannot click on the boxes. Type the number of boxes you want to open in the field below:</p>
+    </div></div>
+
+
+        {% verbatim %}
+            <div
+                id="bomb-task"
+                class="ng-cloak"
+                data-ng-app="bombTask"
+                data-ng-controller="BombTaskController_BRET as BombTaskController_BRET">
+
+                <div class="matrix">
+
+                    <div
+                        class="row"
+                        data-ng-repeat="(row,columns) in BombTaskController_BRET.matrix">
+                        <div
+                            class="col"
+                            data-ng-repeat="(col,column) in columns">
+                            <div
+                                class="holder"
+                                data-card="column"
+                                data-card-is-active="column.$$active"
+                                data-card-on-toggle="BombTaskController_BRET.update(column,state)"
+                                data-ng-class="{
+                                    'resolved':BombTaskController_BRET.resolved && column.$$resolved,
+                                    'bomb':BombTaskController_BRET.resolved && BombTaskController_BRET.isBomb(column)
+                                }"
+                                data-ng-style="{
+                                    'width':BombTaskController_BRET.width,
+                                    'height':BombTaskController_BRET.height
+                                }"
+                                data-card-is-clickable="!BombTaskController_BRET.dynamic && !BombTaskController_BRET.input"
+                                data-card-is-disabled="(!BombTaskController_BRET.undoable && column.$$active) || !BombTaskController_BRET.started || BombTaskController_BRET.stopped">
+
+                                <span
+                                    class="front"
+                                    data-ng-style="{
+                                        'width':BombTaskController_BRET.width,
+                                        'height':BombTaskController_BRET.height
+                                    }">
+                                    <i class="material-icons fa-check icon">check_box</i>
+                                </span>
+                                <span
+                                    class="back"
+                                    data-ng-style="{
+                                        'width':BombTaskController_BRET.width,
+                                        'height':BombTaskController_BRET.height
+                                    }">
+                                    <i class="material-icons fa-dollar-sign">euro_symbol</i>
+                                    <i class="material-icons fa-bomb">flash_on</i>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="counter">
+
+                        <div data-ng-if="!BombTaskController_BRET.input">
+                            <strong>
+                                {% endverbatim %}
+                                {% trans "No. of boxes collected:" %}
+                                {% verbatim %}
+                            </strong>
+                            <span data-ng-bind="BombTaskController_BRET.getCollectedBoxes()"></span>
+                            <br>
+                            <strong>
+                                {% endverbatim %}
+                                {% trans "No. of boxes remaining:" %}
+                                {% verbatim %}
+                            </strong>
+                            <span data-ng-bind="BombTaskController_BRET.getRemainingBoxes()"></span>
+                        </div>
+                        <div data-ng-if="BombTaskController_BRET.input">
+                            <label>
+                                {% endverbatim %}
+                                {% trans "I want to open " %}
+                                {% verbatim %}
+                                <input
+                                    min="0"
+                                    type="number"
+                                    class="form-control"
+                                    data-ng-change="BombTaskController_BRET.select()"
+                                    data-ng-disabled="BombTaskController_BRET.stopped"
+                                    data-ng-model="BombTaskController_BRET.input_value"
+                                    max="{{ BombTaskController_BRET.getTotalBoxes() }}"/> boxes
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+
+                        <div data-ng-if="!BombTaskController_BRET.resolved">
+                            <button
+                                type="button"
+                                href="javascript:void(0)"
+                                class="btn btn-primary btn-md start"
+                                data-ng-if="BombTaskController_BRET.dynamic"
+                                data-ng-click="BombTaskController_BRET.start()"
+                                data-ng-disabled="BombTaskController_BRET.started">
+                                <span>
+                                    {% endverbatim %}
+                                    {% trans "Start" %}
+                                    {% verbatim %}
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                href="javascript:void(0)"
+                                class="btn btn-danger btn-md stop"
+                                data-ng-click="BombTaskController_BRET.stop()"
+                                data-ng-disabled="!BombTaskController_BRET.getCollectedBoxes() || !BombTaskController_BRET.started || BombTaskController_BRET.stopped">
+                                <span>
+                                    {% endverbatim %}
+                                    {% trans "Confirm this number of boxes" %}
+                                    {% verbatim %}
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                href="javascript:void(0)"
+                                class="btn btn-primary btn-md resolve"
+                                data-ng-if="BombTaskController_BRET.feedback"
+                                data-ng-click="BombTaskController_BRET.resolve()"
+                                data-ng-disabled="!BombTaskController_BRET.stopped">
+
+                                <span>
+                                    {% endverbatim %}
+                                    {% trans "Open" %}
+                                    {% verbatim %}
+                                </span>
+                            </button>
+                        </div>
+
+                        <div data-ng-if="BombTaskController_BRET.resolved">
+                            {% endverbatim %}
+                                {% next_button %}
+                            {% verbatim %}
+                        </div>
+
+                    </div>
+                </div>
+
+                <input type="hidden" name="bomb_BRET" id="bomb-BRET" data-ng-value="BombTaskController_BRET.form.bomb"/>
+                <input type="hidden" name="boxes_scheme" id="boxes_scheme" data-ng-value="BombTaskController_BRET.form.boxes_scheme"/>
+                <input type="hidden" name="boxes_collected_BRET" id="boxes_collected_BRET" data-ng-value="BombTaskController_BRET.form.boxes_collected"/>
+                <input type="hidden" name="bomb_row_BRET" id="bomb_row_BRET" value="" data-ng-value="BombTaskController_BRET.form.bomb_row"/>
+                <input type="hidden" name="bomb_col_BRET" id="bomb_col_BRET" value="" data-ng-value="BombTaskController_BRET.form.bomb_col"/>
+
+
+                <script id="/card.html" type="text/ng-template">
+                    <a
+                        class="card"
+                        data-ng-transclude=""
+                        href="javascript:void(0)"
+                        data-ng-click="cardController.toggle()"
+                        data-ng-class="{
+                            'active':cardController.isActive,
+                            'disabled':cardController.isDisabled,
+                            'clickable':cardController.isClickable
+                        }">
+                    </a>
+                </script>
+
+            </div>
+        {% endverbatim %}
+    </div>
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Final questionnaire
+
+{% endblock %}
+
+{% block content %}
+
+<div class="progress">
+  <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+  <span class="sr-only">{{ progress }} % </span>
+  </div>
+</div>
+
+
+
+{# How willing are you to give up something that is beneficial today in order to benefit more from that in the future?</H4>#}
+{#<br> <br/>#}
+{##}
+{#<div width="100%" align="middle" class=".btn-group.btn-group-justified" data-toggle="buttons">#}
+{#    <button class="btn btn-primary" disabled>completely unwilling to do so</button>#}
+{#    {%for val in Constants.willingness_values %}#}
+{#    <label class="btn btn-default"><input type="radio" name="time_qualitative" required value="{{val}}" autocomplete="off">{{val}}</label>#}
+{#    {%endfor%}#}
+{#    <button class="btn btn-primary" disabled>very willing to do so</button>#}
+{#</div>#}
+
+
+<br><br>
+
+            <table class="table" width=100%>
+                <thead>
+                <tr> How willing are you to give up something that is beneficial today in order to benefit more from that in the future?</tr>
+                </thead>
+                <tbody> <tr>
+                    <td style="width:12%;">
+                        <br>completely unwilling</td>
+                    <td style="width:4%;"><br><input required type="radio" name="time_qualitative" value="0"> <br>0</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="1"><br> 1</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="2"><br> 2</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="3"><br> 3</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="4"><br> 4</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="5"><br> 5</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="6"><br> 6</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="7"><br> 7</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="8"><br> 8</td>
+                    <td style="width:4%;"><br><input type="radio" name="time_qualitative" value="9"><br> 9</td>
+                    <td style="width:6%;"><br><input type="radio" name="time_qualitative" value="10"><br> 10</td>
+                    <td style="width:20%;">
+                        <br>completely willing</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <table class="table" width=100%>
+                <thead>
+                <tr> Please tell me, in general, how willing or unwilling you are to take risks.</tr>
+                </thead>
+                <tbody> <tr>
+                    <td style="width:12%;">
+                        <br>completely unwilling</td>
+                    <td style="width:4%;"><br><input required type="radio" name="risk_qualitative" value="0"> <br>0</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="1"><br> 1</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="2"><br> 2</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="3"><br> 3</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="4"><br> 4</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="5"><br> 5</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="6"><br> 6</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="7"><br> 7</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="8"><br> 8</td>
+                    <td style="width:4%;"><br><input type="radio" name="risk_qualitative" value="9"><br> 9</td>
+                    <td style="width:6%;"><br><input type="radio" name="risk_qualitative" value="10"><br> 10</td>
+                    <td style="width:20%;">
+                        <br>completely willing</td>
+                </tr>
+                </tbody>
+            </table>
+
+                <table class="table" width=100%>
+                <thead>
+                <tr>  How effective to you consider investing in flood protection measures that limit flood damage?</tr>
+                </thead>
+                <tbody> <tr>
+                    <td style="width:12%;">
+                        <br>very ineffective</td>
+                    <td style="width:4%;"><br><input required type="radio" name="perceived_efficacy" value="0"> <br>0</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="1"><br> 1</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="2"><br> 2</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="3"><br> 3</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="4"><br> 4</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="5"><br> 5</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="6"><br> 6</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="7"><br> 7</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="8"><br> 8</td>
+                    <td style="width:4%;"><br><input type="radio" name="perceived_efficacy" value="9"><br> 9</td>
+                    <td style="width:6%;"><br><input type="radio" name="perceived_efficacy" value="10"><br> 10</td>
+                    <td style="width:20%;">
+                        <br>very effective</td>
+                </tr>
+                </tbody>
+            </table>
+
+
+
+{##}
+{#Please tell me, in general, how willing or unwilling you are to take risks.#}
+{#<br> <br/>#}
+{##}
+{#<div width="100%" align="middle" class=".btn-group.btn-group-justified" data-toggle="buttons">#}
+{#    <button class="btn btn-primary" disabled>completely unwilling to do so</button>#}
+{#    {%for val in Constants.willingness_values %}#}
+{#    <label class="btn btn-default"><input type="radio" name="risk_qualitative" required value="{{val}}" autocomplete="off">{{val}}</label>#}
+{#    {%endfor%}#}
+{#    <button class="btn btn-primary" disabled>very willing to do so</button>#}
+{#</div>#}
+{##}
+{##}
+{#<br></br>#}
+{##}
+{# How effective to you consider investing in flood protection measures that limit flood damage?#}
+{#<br> <br/>#}
+{##}
+{#<div width="100%" align="middle" class=".btn-group.btn-group-justified" data-toggle="buttons">#}
+{#    <button class="btn btn-primary" disabled>Very ineffective</button>#}
+{#    {%for val in Constants.willingness_values %}#}
+{#    <label class="btn btn-default"><input type="radio" name="perceived_efficacy" required value="{{val}}" autocomplete="off">{{val}}</label>#}
+{#    {%endfor%}#}
+{#    <button class="btn btn-primary" disabled>Very effective</button>#}
+{#</div>#}
+{##}
+{##}
+{#<br></br>#}
+
+
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" > Next </button>
+{% endblock %}

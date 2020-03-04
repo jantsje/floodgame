@@ -1,0 +1,67 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% include 'snippets/Title.html' %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+<div class="row">
+<div class="col-3">
+    <div class="card" style="text-align:center;"> <br><br>
+        {% include 'snippets/Riskblock.html' %}
+        <div class="card-body">
+            <h5 class="card-title">Each year the flood risk is <span style="color:#007bff;">{{risk}} percent </span> </h5>
+        </div>
+    </div>
+</div>
+        {% include 'snippets/Damageblock.html' %}
+        {% include 'snippets/Insuranceblock.html' %}
+</div>
+
+
+<br>
+{% if scenario_nr == "0" %}
+<div class="alert alert-warning" role="alert">
+     <h4><strong>Attention!</strong> This is a test scenario. You can use this scenario to get familiar with the game.
+     The results will not be taken into account for your final payoff.</h4>
+     </div>
+<br> <br>
+{% elif scenario_nr == "1" %}
+<div class="alert alert-warning" role="alert">
+     <h4><strong>Attention!</strong> Some information is different across scenarios.
+    Please consider the information at the start of a scenario carefully and make your decisions.</h4>
+     </div>
+<br> <br>
+ {% else %}
+<div class="alert alert-warning" role="alert">
+ <h4> <strong>Attention!</strong> This is a new scenario and it is independent of the previous scenario.<br>
+
+        {% if risk == previous_floodrisk and deductible != previous_deductible %}
+     The <b>deductible</b> has changed.
+        {% elif risk != previous_floodrisk and deductible == previous_deductible %}
+     The <b>flood risk</b> has changed.
+        {% elif risk != previous_floodrisk and deductible != previous_deductible %}
+     Both the <b>flood risk</b> and the <b>deductible</b> have changed. <br>
+         {% endif %}
+
+     {%if player.has_insurance %}
+     The <b>premium</b> has changed accordingly.
+          {% endif %}
+
+</h4></div>
+{%endif%}
+
+
+<button class="btn btn-primary btn-lg">Start the scenario</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+
+
+{% endblock %}
+

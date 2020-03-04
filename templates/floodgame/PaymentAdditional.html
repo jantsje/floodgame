@@ -1,0 +1,52 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+{% block title %}
+    {{page_title}}
+{% endblock %}
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<div class="card"> <div class="card-body"><p>
+    In the table below you see the three additional tasks.
+
+</p></div></div>
+
+  <table class="table" style="width:70%">
+    <tr>
+        <th>Scenario</th>
+    </tr>
+{% if selected_additional == 1 and selected != None%}
+      <tr  class="bg-success">
+{% else %}
+
+          <tr>{% endif %}
+          <td>Additional task 1</td>
+      </tr>
+{% if selected_additional == 2 and selected != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Additional task 2</td>
+      </tr>
+{% if selected_additional == 3 and selected != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Additional task 3</td>
+      </tr>
+
+
+  </table>
+
+
+<br>
+
+
+<button class="btn btn-primary btn-lg" name="selected" value="selected">Click here to select a random task for payment</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+

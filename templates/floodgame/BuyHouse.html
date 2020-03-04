@@ -1,0 +1,42 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    {{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<ul class="nav justify-content-between">
+<li>
+<div class="alert alert-light" role="alert"> you own:
+    <span style="color:#007bff;"><strong>{{cumulative_payoff}}</strong></span> in  savings
+
+    {%if player.has_loan%},  <span style="color:red;">{{loan}}</span> in loan
+    {%endif%}
+</div>
+
+
+<div class="col-6">
+    <div class="card" style="text-align:center;">
+        <div class="card-body">
+        <i class="material-icons black" style="font-size:5em;">home</i>
+
+      <h5 class="card-text">
+          Price of a house <br>{{Constants.house_value}}</span>
+      </h5></div></div>
+
+</div>
+
+<div class="card"> <div class="card-body"><p>
+To start with the game, please pay {{Constants.house_value}} to buy a house.
+</p> <button name="buy_house" value="bought" class="btn btn-primary btn-lg"> Buy a house for {{Constants.house_value}} </button>
+</div></div>
+
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}

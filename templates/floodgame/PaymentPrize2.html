@@ -1,0 +1,92 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    {{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<div class="card"> <div class="card-body"><p>
+
+    In the table below you see your payoffs for each of the scenarios, as card as the time preferences questions.
+        We will now select one of these rows for payment. This is the amount of money that you will be paid if you are selected from all participants as a winner.
+</p><p><strong>  Note that each participant has an equal chance of being selected as a winner. <br>The computer will randomly select this person.</strong>
+</p></div></div>
+
+  <table class="table" style="width:100%">
+    <tr>
+        <th>Scenario</th>
+        <th>Payment if you are selected as a winner</th>
+    </tr>
+{% if selected_pref == 1 and selected_button != None%}
+      <tr  class="bg-success">
+{% else %}
+
+          <tr>{% endif %}
+          <td>Scenario 1</td>
+          <td>{{payoff1}}</td>
+      </tr>
+{% if selected_pref == 2 and selected_button != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Scenario 2</td>
+          <td>{{payoff2}}</td>
+      </tr>
+{% if selected_pref == 3 and selected_button != None%}
+      <tr  class="bg-success">
+{% else%}
+          <tr>{% endif %}
+          <td>Scenario 3</td>
+          <td>{{payoff3}}</td>
+      </tr>
+{% if selected_pref == 4 and selected_button != None %}
+      <tr class="bg-success">
+{% else%}
+
+          <tr>{% endif %}
+          <td>Scenario 4</td>
+          <td>{{payoff4}}</td>
+      </tr>
+{% if selected_pref == 5 and selected_button != None %}
+<tr class="bg-success">
+{% else%}
+
+  <tr>{% endif %}
+  <td>Scenario 5</td>
+  <td>{{payoff5}}</td>
+</tr>
+{% if selected_pref == 6 and selected_button != None %}
+<tr class="bg-success">
+{% else%}
+
+  <tr>{% endif %}
+  <td>Scenario 6</td>
+  <td>{{payoff6}}</td>
+</tr>
+
+      {% if selected_pref == 7 and selected_button != None %}
+      <tr class="bg-success">
+{% else%}
+
+          <tr>{% endif %}
+          <td>Time preferences</td>
+          <td>{{payoff_time}}</td>
+      </tr>
+
+  </table>
+
+
+<br>
+
+
+<button class="btn btn-primary btn-lg" name="selected_button" value="selected">Click here to see an overview of payments</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+

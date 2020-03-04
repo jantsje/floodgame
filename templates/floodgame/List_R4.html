@@ -1,0 +1,137 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<div class="card"> <div class="card-body"><p>
+    The decisions you made between option C and option D are listed below. <br> The computer has randomly selected the
+    <b>{% if left_selected2 %} left {% else %} right {%endif%} column </b> and <b>row {{selected_row2}}</b> for payment.
+
+</p></div></div>
+
+
+<div align="middle">
+    <table  style="width:100%" class="table table-sm table-striped">
+        <colgroup>
+            <col width="12%">
+            <col width="3%">
+            <col width="15%">
+            <col width="6%">
+            <col width="4%">
+            <col width="4%">
+            <col width="12%">
+            <col width="3%">
+            <col width="15%">
+            <col width="4%">
+
+        </colgroup>
+        <tr >
+            <th style="text-align:center; border-right:1px solid #000;border-bottom:1px solid #000" colspan="5"><h5>Option C</h5></th>
+            <th style="text-align:center; border-bottom:1px solid #000" colspan="5"><h5>Option D</h5></th>
+        </tr>
+        {% for amount in vars_for_risk3 %}
+
+                {% if selected_row2 == forloop.counter %}
+        <tr class="bg-success" align="left">
+                {% else %}
+        <tr>
+                {% endif %}
+
+            {% if forloop.counter >= player.switching_point_risk2 %}
+                    <td align="left"><span style="color:lightgray;">50% chance of </span>
+                    <td align="left"><span style="color:pink;"><b>&euro;{{ amount.0 }} </b>  </span></td>
+                    <td align="left"><span style="color:lightgray;"> and 50% chance of</span>
+                    <td align="left"><span style="color:pink;"> &euro;{{amount.1}} </span></td>
+            {% else %}
+                    <td align="left">50% chance of
+
+
+                {% if forloop.counter == selected_row2 and left_selected2 and forloop.counter < player.switching_point_risk2%}
+                        <td align="left" style="border:1px solid #000;color:red"><b> &euro;{{ amount.0 }} </b></td>
+                {% elif forloop.counter < player.switching_point_risk2%}
+                        <td align="left" style="color:red;"><b> &euro;{{ amount.0 }} </b></td>
+                {% else %}
+                        <td align="left"><span style="color:pink;"><b> &euro;{{ amount.0 }}  </b></span></td>
+                {% endif%}
+
+
+                <td align="left"> and 50% chance of
+
+                {% if forloop.counter == selected_row2 and not left_selected2 and forloop.counter < player.switching_point_risk2%}
+                        <td align="left" style="border:1px solid #000;color:red"><b> &euro;{{ amount.1 }} </b></td>
+                {% elif forloop.counter < player.switching_point_risk2%}
+                        <td align="left" style="color:red;"><b> &euro;{{ amount.1 }} </b></td>
+                {% else %}
+                     <td align="left"><span style="color:pink;"><b> &euro;{{ amount.1 }}  </b></span></td>
+                {% endif%}
+            {% endif%}
+
+            <td align="left" style="border-right:1px solid #000;">
+            <td align="left"></td>
+            <td align="left">
+            {% if forloop.counter >= player.switching_point_risk2 %}
+                    50% chance of
+            {% else %}
+                    <span style="color:lightgray;"> 50% chance of </span>
+            {% endif%}
+            </td>
+
+            {% if forloop.counter == selected_row2 and left_selected2 and forloop.counter >= player.switching_point_risk2%}
+                    <td align="left" style="border:1px solid #000;color:red"><b> &euro;{{ amount.2 }} </b></td>
+            {% elif forloop.counter >= player.switching_point_risk2%}
+                    <td align="left" style="color:red;"><b> &euro;{{ amount.2 }} </b></td>
+            {% else %}
+                    <td align="left"><span style="color:pink;"><b> &euro;{{ amount.2 }}  </b></span></td>
+            {% endif%}
+
+
+            <td align="left">
+            {% if forloop.counter >= player.switching_point_risk2 %}
+                    and 50% chance of
+            {% else %}
+                    <span style="color:lightgray;"> and 50% chance of </span>
+            {% endif%}
+            </td>
+
+
+            {% if forloop.counter == selected_row2 and not left_selected2 and forloop.counter >= player.switching_point_risk2 %}
+                    <td align="left" style="border:1px solid #000;color:red"><b> &euro;{{ amount.3 }}</b></td>
+            {% else %}
+                    <td align="left"><span style="color:pink;"><b> &euro;{{ amount.3 }}</b></span></td>
+            {% endif%}
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+    </div>
+<div class="card">
+   <div class="card-body"><p>
+    For this task you were endowed with &euro;{{Constants.endowment_loss_str}}.
+       Your payoff for the additional task thus: <b>&euro;{{payoff_risk2}}</b>.</p></div>
+</div>
+
+    {{ form.errors }}
+    <input type="hidden" name="switching_point_risk2" id="id_switching_point"
+           value="9999">
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" > Next </button>
+
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+
+
+
+
+

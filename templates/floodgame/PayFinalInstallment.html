@@ -1,0 +1,39 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+{% include 'snippets/Title.html' %}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+
+<div class="row">
+<div class="col-3">
+    <div class="card" style="text-align:center;">  </p><p>
+        {% include 'snippets/Riskblock.html' %}
+        <div class="card-text">
+            <h5 class="card-title">Each year the flood risk is <span style="color:#007bff;">{{risk}} percent </span> </h5>
+        </div>
+    </div>
+</div>
+        {% include 'snippets/Damageblock.html' %}
+        {% include 'snippets/Insuranceblock.html' %}
+</div>
+<div class="alert alert-light" role="alert"></div>
+
+
+
+<div class="alert alert-dark" role="alert">
+    You have decided to invest <b>{{mitigation_cost_this_scenario}}</b> and you have received a loan to spread these investment costs.
+        You are now in the last year. Please repay the final part of your loan now.
+</div><br>
+
+<button name="repay_loan" value="repaid_loan" class="btn btn-primary btn-lg"> Pay final {{loan}} loan cost</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}

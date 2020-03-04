@@ -1,0 +1,145 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<span style="text-align:center">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+        <br><br>
+        <h4><strong>Attention!</strong> This task is unrelated to the previous task.</h4>
+         <br><br>
+         <br><br><br>
+         <br><br><br>
+         <br>
+            <button class="btn btn-default text-center" data-dismiss="alert" aria-label="Close">Close this window to start the task</button>
+            <br><br> <br><br>
+
+<br><br><br><br>
+<br><br><br><br>
+        <br><br><br><br>
+<br><br><br><br>
+<br><br><br><br>
+     </div>
+</span>
+<div class="card"> <div class="card-body">
+    <p>
+         We will ask you some questions about a payment now versus a payment in a year from now.
+
+         </p><p>If you are randomly selected for large payment, we will pay you.
+    Note that each participant has an equal chance of being selected for large payment. The computer will randomly select this person.
+    We will pay the chosen option of a randomly selected row, <b>at the time specified</b> (now or in 12 months).
+         </p><p>
+         <b>That may be up to &euro;{{max_time_payment}}</b>, so please consider carefully.
+         </p>
+
+</div></div>
+
+<br>
+
+<div align="middle">
+    <table   style="width:40%" class="table table-sm table-striped">
+        <colgroup>
+            <col width="30%">
+            <col width="10%">
+            <col width="15%">
+            <col width="50%">
+        </colgroup>
+<tr >
+        <tr >
+            <th style="text-align:center; border-right:1px solid #000;border-bottom:1px solid #000" colspan="2"><h5>Option A</h5></th>
+            <th style="text-align:center; border-bottom:1px solid #000" colspan="2"><h5>Option B</h5></th>
+        </tr>
+        </tr>
+        {% for amount in Constants.right_side_amounts_time %}
+            <tr>
+                <td align="middle">
+                    <b>&euro;{{ player.left_side_time }}</b> now
+                <td align="left" style="border-right:1px solid #000">
+                    <input type="radio"
+                           value="left"
+                           name="{{ amount|json }}"
+                           required>&nbsp;&nbsp;</td>
+                <td align="middle" >
+                    <input type="radio"
+                           name="{{ amount|json }}"
+                           value="right" data-amount="{{ amount|json }}"
+                           required>
+                </td>
+                <td align="left">
+                    <b>&euro;{{ amount }}</b> in 12 months
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    {{ form.errors }}
+    <input type="hidden" name="switching_point_time" id="id_switching_point"
+           value="9999">
+
+</div>
+
+
+
+
+    <button class="btn btn-primary btn-lg" name="selected" value="selected">Click here to select a random option for payment</button>
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+
+
+{% block scripts %}
+    <script>
+        $(document).ready(function () {
+            $('input[type=radio]').change(
+                function () {
+                    var clickedRadio = this;
+                    var afterClickedRadio = false;
+
+
+                    var radios = document.querySelectorAll('input[type=radio]');
+                    for (i = 0; i < radios.length; ++i) {
+                        var radio = radios[i];
+                        if (radio === clickedRadio) {
+                            afterClickedRadio = true;
+                            continue;
+                        }
+                        if (!afterClickedRadio && clickedRadio.value === 'left' && radio.value === 'left') {
+                            radio.checked = true;
+                        }
+                        if (afterClickedRadio && clickedRadio.value === 'right' && radio.value === 'right') {
+                            radio.checked = true;
+                        }
+                    }
+                }
+            );
+
+            <!-- rename the selector when class names are stabilized -->
+            $('button').click(function () {
+                var radios = document.querySelectorAll('input[type=radio]');
+
+
+                for (i = 0; i < radios.length; ++i) {
+                    var radio = radios[i];
+                    if (radio.value === 'right' && radio.checked) {
+                        $('#id_switching_point').val(radio.dataset.amount);
+                        break;
+                    } else {
+                        $('#id_switching_point').val(9999);
+                    }
+                }
+            });
+        });
+    </script>
+
+
+{% endblock%}
+

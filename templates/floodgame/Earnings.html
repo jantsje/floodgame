@@ -1,0 +1,252 @@
+{% extends "global/Base.html" %}
+{% load staticfiles otree_tags %}
+{% load i18n %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+    <link href="{% static 'bret/css/bret.css' %}" rel="stylesheet"/>
+    <style type="text/css">.ng-cloak{display:none !important;}</style>
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+   rel="stylesheet">
+
+
+    <script type="text/javascript">
+        var minutesLabel = document.getElementById("minutes_2");
+        var secondsLabel = document.getElementById("seconds_2");
+        var totalSeconds = 0;
+        setInterval(setTime, 1000);
+
+        function setTime()
+        {
+            ++totalSeconds;
+            secondsLabel.innerHTML = pad(totalSeconds%60);
+            minutesLabel.innerHTML = pad(parseInt(totalSeconds/60));
+        }
+
+        function pad(val)
+        {
+            var valString = val + "";
+            if(valString.length < 2)
+            {
+                return "0" + valString;
+            }
+            else
+            {
+                return valString;
+            }
+        }
+    </script>
+
+    <script src="{% static 'bret/js/angular.min.js' %}"></script>
+    <script src="{% static 'bret/js/bret.js' %}"></script>
+    <script>(function(angular){
+        try{
+            // get bomb task module
+            angular.module("bombTask")
+            // card size properties
+            .constant("WIDTH",{{ box_width|json }})
+            .constant("HEIGHT",{{ box_height|json }})
+            // matrix size properties
+            .constant("NUM_ROWS",{{ num_rows|json}})
+            .constant("NUM_COLS",{{ num_cols|json}})
+            // dynamic mode properties
+            .constant("RANDOM",{{ random|json}})
+            .constant("DYNAMIC",{{ dynamic|json }})
+            .constant("INTERVAL",{{ time_interval|json }})
+            // visibility properties
+            .constant("FEEDBACK",{{ feedback|json }})
+            // behaviour properties
+            .constant("UNDOABLE",{{ undoable|json }})
+            .constant("RESET",{{ reset|json }})
+            .constant("INPUT",{{ input|json }});
+
+        } catch(e){ console.error("Could not pass server-side settings to bomb task app!");}
+    })(angular);
+    </script>
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+Collect your money
+{% endblock %}
+
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{% block content %}
+
+
+{% include 'snippets/Progressbar.html' %}
+
+
+
+<div class="card"><div class="card-body"><p>
+
+    We now ask you to put in some effort by clicking the boxes below.
+    You will be rewarded for your effort with virtual money. With this money you can play the investment game.
+    For each box collected you will receive <b>{{box_value}}</b>.
+</p><p> You can start with the investment game once you have opened <b>30 boxes that contain money</b>.
+    </p></div></div>
+
+
+    <div class="panel panel-primary">
+        {% verbatim %}
+            <div
+                id="bomb-task"
+                class="ng-cloak"
+                data-ng-app="bombTask"
+                data-ng-controller="BombTaskController as bombTaskController">
+
+<div class="matrix">
+
+                    <div
+                        class="row"
+                        data-ng-repeat="(row,columns) in bombTaskController.matrix">
+                        <div
+                            class="col"
+                            data-ng-repeat="(col,column) in columns">
+                            <div
+                                class="holder"
+                                data-card="column"
+                                data-card-is-active="column.$$active"
+                                data-card-on-toggle="bombTaskController.update(column,state)"
+                                data-ng-click="bombTaskController.resolve()"
+                                data-ng-class="{
+                                    'resolved':bombTaskController.resolved && column.$$resolved,
+                                    'bomb':bombTaskController.resolved && bombTaskController.isBomb(column)
+                                }"
+                                data-ng-style="{
+                                    'width':bombTaskController.width,
+                                    'height':bombTaskController.height
+                                }"
+                                data-card-is-clickable="!bombTaskController.dynamic && !bombTaskController.input"
+                                data-card-is-disabled="(!bombTaskController.undoable && column.$$active) || !bombTaskController.started || bombTaskController.stopped">
+                                <span
+                                    class="front"
+                                    data-ng-style="{
+                                        'width':bombTaskController.width,
+                                        'height':bombTaskController.height
+                                    }">
+                                </span>
+                                <span
+                                    class="back"
+                                    data-ng-style="{
+                                        'width':bombTaskController.width,
+                                        'height':bombTaskController.height
+                                    }">
+                                    <i class="material-icons glyphicon-euro">euro_symbol</i>
+                                    <i class="material-icons glyphicon-remove">clear</i>
+                                </span>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="counter">
+
+                        <div data-ng-if="!bombTaskController.input">
+                            <strong>
+                                {% endverbatim %}
+                                {% trans "No. of boxes collected that contain money:" %}
+                                {% verbatim %}
+                            </strong>
+                            <span data-ng-bind="bombTaskController.getCollectedBoxes()"></span>
+                            <br>
+                            <strong>
+                                {% endverbatim %}
+                                {% trans "No. of boxes with money required:" %}
+                                {% verbatim %}
+                            </strong>
+                            <span data-ng-bind="bombTaskController.getRemainingBoxes()"></span>
+                        </div>
+                        <div data-ng-if="bombTaskController.input">
+                            <label>
+                                {% endverbatim %}
+                                {% trans "No. of boxes to collect:" %}
+                                {% verbatim %}
+                                <input
+                                    min="0"
+                                    type="number"
+                                    class="form-control"
+                                    data-ng-change="bombTaskController.select()"
+                                    data-ng-disabled="bombTaskController.stopped"
+                                    data-ng-model="bombTaskController.input_value"
+                                    max="{{ bombTaskController.getTotalBoxes() }}"/>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+
+
+                        <div data-ng-if="bombTaskController.clickedAllBoxes()">
+                            {% endverbatim %}
+                            <div class="alert alert-success" role="alert">
+                                <p> You have collected enough money to proceed. </p><button class="btn btn-primary btn-lg">Next</button>
+     </div>
+
+                            {% verbatim %}
+                        </div>
+                            <div data-ng-if="!bombTaskController.clickedAllBoxes()">
+                            {% endverbatim %}
+Please collect more money
+                            {% verbatim %}
+                        </div>
+
+                    </div>
+                </div>
+
+                <input type="hidden" name="bomb" id="bomb" data-ng-value="bombTaskController.form.bomb"/>
+                <input type="hidden" name="boxes_scheme" id="boxes_scheme" data-ng-value="bombTaskController.form.boxes_scheme"/>
+                <input type="hidden" name="boxes_collected" id="boxes_collected" data-ng-value="bombTaskController.form.boxes_collected"/>
+                <input type="hidden" name="bomb_location" id="bomb_location" value="" data-ng-value="bombTaskController.form.bomb_location"/>
+
+                <script id="/card.html" type="text/ng-template">
+                    <a
+                        class="card"
+                        data-ng-transclude=""
+                        href="javascript:void(0)"
+                        data-ng-click="cardController.toggle()"
+                        data-ng-class="{
+                            'active':cardController.isActive,
+                            'disabled':cardController.isDisabled,
+                            'clickable':cardController.isClickable
+                        }">
+                    </a>
+                </script>
+
+            </div>
+
+
+
+<div id="otree-timeout" class="alert alert-warning">
+    <p>Time spent collecting money:
+
+        <span style="font-weight: bold">
+            <i class="material-icons black">timer</i>
+            <span id="minutes_2"></span>:<span id="seconds_2"></span>
+        </span>
+    </p>
+</div>
+        {% endverbatim %}
+    </div>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% load staticfiles otree_tags %}
+
+<div class="card">
+        <div class="card-body">
+            <div class="card-text">
+                <p> You will play the investment game 6 times. A new game is called a new <strong>scenario</strong>.
+                    A new scenario means that you have moved to a different place. </p>
+                <p> Any investment you make reduces damage for <strong>all years within one scenario.</strong> </p>
+                <p> A scenario consists of at least 10 years, but <strong> possibly more </strong>
+                    (in real life you also do not know how long you will stay in a certain place).
+                    At the start of each year you will get a <strong>fixed</strong> income of {{income}},
+                    which will be added to your savings account. </p>
+                <p> The image below represents the stages of a typical year: </p>
+            </div>
+            <p class="card-text">
+    {% if player.has_loan %}
+  <img class="card-img-bottom" width="100%" src="{% static 'floodgame/round_insurance_loan.png' %}"/>
+    {% elif player.has_insurance %}
+  <img class="card-img-bottom" width="100%" src="{% static 'floodgame/round_insurance.png' %}"/>
+    {% else %}
+  <img class="card-img-bottom" width="100%" src="{% static 'floodgame/round_no_insurance.png' %}"/>
+    {% endif %}
+            </p>
+            <div class="card-text">
+                <p>Note that you cannot go back to the previous page throughout the game.</p>
+            </div>
+        </div>
+</div>
+
+
+

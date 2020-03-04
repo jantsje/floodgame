@@ -1,0 +1,11 @@
+{% load staticfiles otree_tags %}
+
+{%if player.risk == Constants.risk_1 %}   <img class="card-img-top" src="{% static 'floodgame/1percent.png' %}"/>
+{%elif player.risk == Constants.risk_low %} <img class="card-img-top"  src="{% static 'floodgame/floodrisk_low.png' %}"/>
+{%elif player.risk == Constants.risk_3 %} <img class="card-img-top"  src="{% static 'floodgame/5percent.png' %}"/>
+{%elif player.risk == Constants.risk_4 %} <img class="card-img-top"  src="{% static 'floodgame/10percent.png' %}"/>
+{%elif player.risk == Constants.risk_high %} <img class="card-img-top"  src="{% static 'floodgame/floodrisk_high.png' %}"/>
+{%elif player.risk == Constants.risk_6 %} <img class="card-img-top"  src="{% static 'floodgame/20percent.png' %}"/>
+
+{%endif%}
+

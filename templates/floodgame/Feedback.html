@@ -1,0 +1,38 @@
+{% extends "floodgame/Surveypage.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+Feedback on the game and questionnaire
+<br></br>
+<div class="progress">
+  <div class="progress-bar progress-bar-success" role="progressbar"  aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+  <span class="sr-only">{{ progress }} % </span>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+
+{% for field in form%}
+{% formfield field %}
+{% endfor %}
+
+<button name="next_button"  class="btn btn-primary btn-right btn-lg" disabled> Finish </button>
+
+
+{% endblock %}
+{% block scripts %}
+
+<script>
+    $('#id_understand').change(function() {
+        if (this.checked) {
+            $('.btn-primary').prop("disabled", false);
+        } else {
+            $('.btn-primary').prop("disabled", true);
+        }
+    });
+</script>
+
+{% endblock %}

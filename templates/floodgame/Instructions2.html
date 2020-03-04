@@ -1,0 +1,26 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+{% block title %}
+    {{page_title}}
+{% endblock %}
+
+{% block content %}
+
+
+{% include 'snippets/Progressbar.html' %}
+{% include 'snippets/Earningsbar.html' %}
+
+
+{% include 'snippets/Instr2.html' %}
+
+<br>
+
+<button class="btn btn-primary btn-right btn-lg">Next</button>
+
+{% include 'snippets/InstructionsCounter.html' %}
+
+
+{% endblock %}
+
+

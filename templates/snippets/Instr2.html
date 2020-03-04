@@ -1,0 +1,61 @@
+{% load staticfiles otree_tags %}
+
+{%if player.has_insurance %}
+<div class="card">
+    <br>
+    <div class="row">
+        <div class="col-md-5 px-3">
+                        <div class="card-block px-3">
+                            <p>During this game you have <strong> mandatory flood insurance</strong>.
+                                That means that each year, you  pay an <strong>insurance premium</strong>.
+            This premium is fair, based on the probability of loss, your deductible and the maximum damage. </p>
+                            <p>In exchange, the insurance company will pay a part of your damage in case your house is flooded.</p>
+                        </div>
+        </div>
+        <div class="col-md-7">
+                {%if player.level_deductible == 2 %}
+                <img width="100%" src="{% static 'floodgame/deductible_high.png' %}"/>
+            {%elif player.level_deductible == 1 %}
+                <img width="100%" src="{% static 'floodgame/deductible_low.png' %}"/>
+            {%else%}
+                <img width="100%" src="{% static 'floodgame/deductible5.png' %}"/>
+            {%endif%}
+            <br>
+            <small class="text-muted">The part that you will pay is called the <strong> deductible </strong> (eigen risico) and it may differ per insurance company.
+    In the above example, the  deductible is {{deductible_percent}} percent. </small>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+
+<div class="card">
+<br>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card-block px-3">
+                <img width="100%" src="{% static 'floodgame/mitigation.png' %}"/>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card-block px3">
+                <p>
+    To protect your house from flood damage, you can invest in <strong>protective measures</strong> for reducing flood risk of your virtual home.
+    These will not change the probability of a flood, but will <strong>reduce the damage if it occurs</strong>.
+                </p>
+            <p>  For example, moving your electric appliances to the first floor is such a measure that reduces flood damage.
+            </p>
+                <p> You can choose how much you want to invest. A larger investment will lead to more damage reduction.
+    {% if player.has_discount %}
+                In addition, your <b>premium will be lowered </b> based on the damage reduction of your investment. </p>
+                {% else %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

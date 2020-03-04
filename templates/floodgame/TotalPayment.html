@@ -1,0 +1,52 @@
+{% extends "floodgame/Page.html" %}
+{% load staticfiles otree_tags %}
+
+
+{% block title %}
+{{page_title}}
+{% endblock %}
+
+{% block content %}
+
+{% include 'snippets/Progressbar.html' %}
+
+<div class="card"> <div class="card-body"><p>
+If you finish the questionnaire, you will be paid:
+</p></div></div>
+
+    <table class="table"  style="width:30%">
+       <tr>
+           <td>participation fee </td>
+           <td>{{participation_fee}}</td>
+       </tr>
+        <tr>
+            <td> payoff selected scenario</td>
+            <td>{{payoff_small}}</td>
+       </tr>
+       <tr>
+            <td> payoff additional tasks</td>
+            <td>{{payoff_additional}}</td>
+       </tr>
+                <tr>
+            <td><strong> total payoff</strong></td>
+            <td><strong>{{total_payoff}}</strong></td>
+       </tr>
+    </table>
+
+
+   <div class="alert alert-info" role="alert">
+ <div class="card-body"><p>
+
+    <strong>In case you are selected</strong> among all participants for large payment, you will be paid <strong>{{payoff_if_selected}}</strong> extra
+   (once all sessions have taken place).
+    Note that each participant has an equal chance of being selected as a winner. The computer will randomly select this person.
+    </p><p> We will finish this experiment with some general questions.
+</p></div></div>
+
+
+<button class="btn btn-primary btn-lg" name="selected" value="selected">Click here to go to the questionnaire</button>
+{% include 'snippets/InstructionsCounter.html' %}
+
+{% endblock %}
+
+
