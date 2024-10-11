@@ -16,11 +16,6 @@
 {# *** SCRIPTS *** #}
 {# ****************************************************************************************************************** #}
 {% block scripts %}
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-   rel="stylesheet">
-
-
     <script src="{% static 'bret_BRET/js/angular.min.js' %}"></script>
     <script src="{% static 'bret_BRET/js/bret.js' %}"></script>
     <script>(function(angular){
@@ -134,7 +129,7 @@
                                         'width':BombTaskController_BRET.width,
                                         'height':BombTaskController_BRET.height
                                     }">
-                                    <i class="material-icons fa-check icon">check_box</i>
+                                    <span class="icon glyphicon glyphicon-asterisk"></span>
                                 </span>
                                 <span
                                     class="back"
@@ -142,8 +137,8 @@
                                         'width':BombTaskController_BRET.width,
                                         'height':BombTaskController_BRET.height
                                     }">
-                                    <i class="material-icons fa-dollar-sign">euro_symbol</i>
-                                    <i class="material-icons fa-bomb">flash_on</i>
+                                    <span class="icon glyphicon glyphicon-euro"></span>
+                                    <span class="icon glyphicon glyphicon-fire"></span>
                                 </span>
 
                             </div>
@@ -190,7 +185,7 @@
                             <button
                                 type="button"
                                 href="javascript:void(0)"
-                                class="btn btn-primary btn-md start"
+                                class="btn btn-success btn-md start"
                                 data-ng-if="BombTaskController_BRET.dynamic"
                                 data-ng-click="BombTaskController_BRET.start()"
                                 data-ng-disabled="BombTaskController_BRET.started">

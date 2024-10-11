@@ -4,8 +4,6 @@ from otree.api import (
 )
 
 import random  # necessary for random risk_high
-from django import forms  # necessary for final survey
-from django.forms import widgets
 
 author = 'Jantsje Mol'
 
@@ -19,12 +17,13 @@ class Constants(BaseConstants):
     players_per_group = None
     scenarios = ["LH", "LL", "HH", "HL", "LxL", "HxL"]
     scenarios_no_insurance = ["risk1", "risk2", "risk3", "risk4", "risk5", "risk6"]
-    num_test_rounds = 1
-    minyears = 1  # minimum nr of years per scenario
-    maxyears = 1  # maximum nr of years per scenario. if they minyears = maxyears there is no randomness in nr of years
+    num_test_rounds = 2
+    minyears = 5  # minimum nr of years per scenario
+    maxyears = 5  # maximum nr of years per scenario. if they minyears = maxyears there is no randomness in nr of years
     useless_rounds = 0  # only necessary in case of random number of years
-    num_rounds = maxyears*len(scenarios)+num_test_rounds  # 99 could be set very high if it is variable
+    num_rounds = maxyears*len(scenarios)+num_test_rounds # 99 could be set very high if it is variable
     num_installments = 10
+
     risk_high = 15  # high flood risk_high on a scale from 1 to 100
     risk_low = 3  # low flood risk_high on a scale from 1 to 100
     # extra flood risks to test in no_insurance treatment
@@ -44,14 +43,14 @@ class Constants(BaseConstants):
     interest = 1  # in percent, for loan treatment
 
     ''' houses for flood risk '''
-    itemss = list(range(1, 51))
+    itemss = list(range(1,51))
     items = ["{0:0=3d}".format(value) for value in itemss]
-    itemss2 = list(range(51, 101))
+    itemss2 = list(range(51,101))
     items2 = ["{0:0=3d}".format(value) for value in itemss2]
 
     ''' risk and time preferences '''
 
-    willingness_values = list(range(0, 11))  # I don't think these are used at the moment
+    willingness_values = list(range(0, 11))
     # TIME PRICE LIST
     right_side_amounts_time = [100.0, 103.0, 106.10, 109.2, 112.4, 115.6, 118.8, 122.1, 125.4, 128.8, 132.3,
                                135.7, 139.2, 142.8, 146.4, 150.1, 153.8, 157.5, 161.3, 165.1, 169.0, 172.9, 176.9,
@@ -59,7 +58,7 @@ class Constants(BaseConstants):
     # from Falk et al working paper 2016, cannot be constructed by math due to random term
     max_time_payment = '{0:.2f}'.format(max(right_side_amounts_time))
     # RISK GAIN PRICE LIST
-    left_side_riskA = [1.68, 1.76, 1.84, 1.92, 2.00, 2.08, 2.16, 2.24, 2.32, 2.4]  # from Drichoutis & Lusk 2016
+    left_side_riskA = [1.68, 1.76, 1.84, 1.92, 2.00, 2.08, 2.16, 2.24, 2.32, 2.4] # from Drichoutis & Lusk 2016
     left_side_riskB = [2.01, 2.17, 2.32, 2.48, 2.65, 2.86, 3.14, 3.54, 4.50, 4.70]
     right_side_riskA = len(left_side_riskA)*[1.60]
     right_side_riskB = len(left_side_riskA)*[1.00]
@@ -101,7 +100,6 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
 
     def creating_session(self):
-
         for p in self.get_players():
 
             if self.round_number == 1:
@@ -149,7 +147,6 @@ class Subsession(BaseSubsession):
                 p.participant.vars["mitigated_this_scenario"] = 999
                 p.participant.vars["mitigation_cost_this_scenario"] = 999
                 p.participant.vars["deductible_ecu_this_scenario"] = 999
-                p.participant.vars["deductible_ecu_this_scenario"] = 999
                 p.participant.vars["deductible_percent"] = 999
                 p.participant.vars["previous_floodrisk"] = 999
                 p.participant.vars["previous_deductible"] = 999
@@ -160,9 +157,39 @@ class Subsession(BaseSubsession):
                 p.participant.vars["loan"] = c(0)
                 p.mitigation_cost = 0  # fixme why not 999?
 
-                p.set_treatment()
-                p.set_has_treatment()
-                p.set_scenarios()
+                p.participant.vars["years"] = []
+                for l in range(1, Constants.num_test_rounds + 1):  # add test scenario years
+                    p.participant.vars["years"].extend([l])
+
+                p.participant.vars["scenarios_list"] = []
+                for l in range(1, Constants.num_test_rounds + 1):  # add nr 0 to signal test scenario years
+                    p.participant.vars["scenarios_list"].extend([0])
+
+                p.participant.vars["rounds_per_scenario_random"] = []
+                for k in range(1, (len(Constants.scenarios) + 1)):
+                    p.participant.vars["rounds_per_scenario_random"].append(random.randint(Constants.minyears,
+                                                                                           Constants.maxyears))
+                    # set number of years for each scenario
+
+                for i in range(0, len(Constants.scenarios)):
+                    for j in range(1, (int(p.participant.vars["rounds_per_scenario_random"][i])) + 1):
+                        p.participant.vars["scenarios_list"].extend([i + 1])  # list of scenario numbers
+                        p.participant.vars["years"].extend([j])  # list of year numbers
+
+                for l in range(1,
+                               Constants.useless_rounds + 1):  # add nr 99 to extend list, prevent out of range
+                    p.participant.vars["years"].extend([99])
+                    p.participant.vars["scenarios_list"].extend({99})
+
+                p.participant.vars["total_rounds"] = len(p.participant.vars["scenarios_list"]) - \
+                                                     Constants.useless_rounds
+
+                if p.has_insurance:
+                    p.participant.vars["scenarios"] = Constants.scenarios.copy()
+                    random.shuffle(p.participant.vars["scenarios"])
+                else:
+                    p.participant.vars["scenarios"] = Constants.scenarios_no_insurance.copy()
+                    random.shuffle(p.participant.vars["scenarios"])
 
             if self.round_number < len(p.participant.vars["scenarios_list"]) - Constants.useless_rounds + 1:
                 p.year = p.participant.vars["years"][self.round_number - 1]
@@ -172,8 +199,6 @@ class Subsession(BaseSubsession):
                 else:
                     p.scenario = p.participant.vars["scenarios"][p.scenario_nr - 1]
                     # -1 is to correct for python list index that starts at 0
-
-            p.set_has_treatment()
 
             if p.scenario == "HH":
                 p.high_risk = True
@@ -345,119 +370,10 @@ class Player(BasePlayer):
 
     payoff_BRET = models.FloatField()
 
-    difficult = models.CharField(
-        verbose_name="How easy or difficult did you find it to make a choice in the investment game presented to you?",
-        choices=["Very easy", "Easy", "Not easy/not difficult", "Difficult", "Very difficult"],
-        widget=widgets.RadioSelect,
-        default="",
-        # note: without this default option, an empty checkbox will be displayed that is initially selected
-    )
-    explain_strategy = models.TextField(
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}),
-        verbose_name="Could you briefly explain how you made your decisions in the investment game?"
-    )
-    difficult_text = models.TextField(
-        widget=forms.Textarea(attrs={'rows': 3, 'cols': 100}),
-        verbose_name="Could you describe what made the investment game difficult for you?")
-    flood_prone = models.CharField(
-        verbose_name="In real life, do you live in a flood-prone area?",
-        choices=["Yes, I am certain that I live in a flood-prone area",
-                 "I think that I live in a flood-prone area, but I am not sure",
-                 "No, I am certain that I do not live in a flood-prone area", "Don't know"],
-        widget=widgets.RadioSelect,
-        default="")
-    climate_change = models.CharField(
-        verbose_name="What consequences of climate change for flood risk do you expect at your current residence?",
-        choices=["Flood risk will increase", "Flood risk will remain constant",
-                 "Flood risk will decrease", "Don't know"],
-        widget=widgets.RadioSelect,
-        default="")
-    availability = models.CharField(
-        verbose_name="Do you recall any situations of exceptionally "
-                     "high water levels in rivers close to your residence?",
-        choices=["Yes, I can recall high water levels", "No, I cannot recall high water levels"],
-        widget=widgets.RadioSelect,
-        default="")
-
-    think_flooded = models.PositiveIntegerField(
-        verbose_name="How many times do you think you were flooded during the game?")
-
-    worry = models.CharField(
-        verbose_name="I am worried about the danger of flooding at my current residence")
-    flood_risk_perception = models.CharField(
-        verbose_name="I expect that I will never experience a flood near my residence")
-    trust = models.CharField(
-        verbose_name="I am confident that the dikes in the Netherlands are maintained well")
-    concern = models.CharField(
-        verbose_name="The probability of flooding at my current residence is too low to be concerned about")
-
-    regret1 = models.CharField(
-        verbose_name="I felt regret about not investing in protection when a flood occurred in the game")
-    regret2 = models.CharField(
-        verbose_name="When in a certain year in the game no flood occurred, I felt regret about paying for protection")
-
-    control = models.CharField(
-        verbose_name="When I get what I want, it is usually because I am lucky")
-    control2 = models.CharField(
-        verbose_name="It is not always wise for me to plan too far ahead "
-                     "because many things turn out to be a matter of good or bad fortune")
-    control3 = models.CharField(
-        verbose_name="I believe that there are a number of measures that people can take to reduce their risk")
-    control4 = models.CharField(
-        verbose_name="I can pretty much determine what will happen in my life")
-
-    #  ###### RISK & TIME PREFERENCES QUALITATIVE ###############
-    time_qualitative = models.CharField()
-    risk_qualitative = models.CharField()
-    perceived_efficacy = models.IntegerField()
-
-    #  ###### DEMOGRAPHICS ###############
-    age = models.PositiveIntegerField(verbose_name="How old are you?")
-    gender = models.CharField(
-        verbose_name="Are you male or female?",
-        choices=["Male", "Female"], widget=widgets.RadioSelect,
-        default="")
-    income = models.CharField(verbose_name="What is your household monthly income (after taxes)?",
-                              choices=["Less than €499", "Between  €500 and €999", "Between €1000 and €1499",
-                                       "Between €1500 and €1999", "Between €2000 and €2499", "Between €2500 and €2999",
-                                       "Between €3000 and €3499", "Between €3500 and €3999", "Between €4000 and €4499",
-                                       "Between €4500 and €4999", "€5000 or more", "Don't know", "Rather not say"])
-    floor = models.CharField(verbose_name="Please indicate in what kind of property you live:",
-                             choices=["House", "Ground floor apartment", "Apartment on 1st floor or higher", "Other"])
-    edu = models.CharField(verbose_name="What is the highest level of education you have completed?",
-                           choices=["No diploma", "Primary school", "Lower vocational education (VBO, LBO)",
-                                    "Lower general secondary education (ULO, MULO, VMBO, MAVO)",
-                                    "Lower vocational secondary education (MBO)",
-                                    "Higher general secondary education or pre-university education (HAVO, VWO, HBS)",
-                                    "Higher vocational and university education (HBO, WO Bachelor)",
-                                    "Master's degree (WO Master)", "Doctorate, PhD (Promotie-onderzoek)", "Other"])
-    edu_text = models.CharField(verbose_name="In which subject did you major?")
-    nationality = models.CharField(verbose_name="What is your nationality?")
-    postcode = models.CharField(
-        verbose_name="What is your postcode in numbers and letters?",
-        blank=True)
-    insurance = models.CharField(
-        verbose_name="In your Dutch health insurance, what do you think was your deductible (eigen risico) in 2016?",
-        choices=["385 euro, the minimum set by the Dutch government",
-                 "485 euro, I raised it by 100 euro", "585 euro, I raised it by 200 euro",
-                 "685 euro, I raised it by 300 euro", "785 euro, I raised it by 400 euro",
-                 "885 euro, I raised it by 500 euro (the maximum)", "I do not know",
-                 'I do not have Dutch health insurance'])
-    feedback = models.TextField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 130}),
-                                verbose_name="This is the end of the survey. "
-                                             "If you have comments, you can write them below.",
-                                blank=True)
-    email = models.CharField(widget=widgets.EmailInput(),
-                             verbose_name="In case you are selected for large payment, "
-                                          "we will contact you by email to arrange the payment. "
-                                          "Please fill in your email address here.",
-                             blank=True)
-    understand = models.BooleanField(widget=forms.CheckboxInput(),
-                                     verbose_name="I understand that submitting no (working) "
-                                                  "email address excludes me from the large payment")
-
     def set_treatment(self):
+        print("I am now setting the treatment")
         sconfig = self.session.config
+
         combinations = []
         combinations.extend(1 * [[False, False, False, "no insurance"]])
         combinations.extend(1 * [[True, False, False, "baseline"]])
@@ -467,62 +383,20 @@ class Player(BasePlayer):
 
         p = self
         if 'has_insurance' in sconfig:
+            p.has_insurance = sconfig.get('has_insurance')
+            p.has_loan = sconfig.get('has_loan')
+            p.has_discount = sconfig.get('has_discount')
             p.participant.vars["treatment"] = sconfig.get('treatment')
         else:
-            p.participant.vars["combination"] = random.choice(combinations)
+            if p.participant.vars["demo_treatment"] != 'random':
+                p.participant.vars["combination"] = p.participant.vars["demo_treatment"]
+            else:
+                p.participant.vars["combination"] = random.choice(combinations)
+            p.has_insurance = p.participant.vars["combination"][0]
+            p.has_loan = p.participant.vars["combination"][1]
+            p.has_discount = p.participant.vars["combination"][2]
             p.participant.vars["treatment"] = p.participant.vars["combination"][3]
-
-    def set_has_treatment(self):
-        p = self
-        if p.participant.vars["treatment"] == 'no insurance':
-            p.has_insurance = False
-        else:
-            p.has_insurance = True
-        if p.participant.vars["treatment"] == "loan" or p.participant.vars["treatment"] == "loan+discount":
-            p.has_loan = True
-        else:
-            p.has_loan = False
-        if p.participant.vars["treatment"] == "discount" or p.participant.vars["treatment"] == "loan+discount":
-            p.has_discount = True
-        else:
-            p.has_discount = False
-
-    def set_scenarios(self):
-        p = self
-
-        p.participant.vars["years"] = []
-        for l in range(1, Constants.num_test_rounds + 1):  # add test scenario years
-            p.participant.vars["years"].extend([l])
-
-        p.participant.vars["scenarios_list"] = []
-        for l in range(1, Constants.num_test_rounds + 1):  # add nr 0 to signal test scenario years
-            p.participant.vars["scenarios_list"].extend([0])
-
-        p.participant.vars["rounds_per_scenario_random"] = []
-        for k in range(1, (len(Constants.scenarios) + 1)):
-            p.participant.vars["rounds_per_scenario_random"].append(random.randint(Constants.minyears,
-                                                                                   Constants.maxyears))
-            # set number of years for each scenario
-
-        for i in range(0, len(Constants.scenarios)):
-            for j in range(1, (int(p.participant.vars["rounds_per_scenario_random"][i])) + 1):
-                p.participant.vars["scenarios_list"].extend([i + 1])  # list of scenario numbers
-                p.participant.vars["years"].extend([j])  # list of year numbers
-
-        for l in range(1,
-                       Constants.useless_rounds + 1):  # add nr 99 to extend list, prevent out of range
-            p.participant.vars["years"].extend([99])
-            p.participant.vars["scenarios_list"].extend({99})
-
-        p.participant.vars["total_rounds"] = len(p.participant.vars["scenarios_list"]) - \
-                                             Constants.useless_rounds
-
-        if p.has_insurance:
-            p.participant.vars["scenarios"] = Constants.scenarios.copy()
-            random.shuffle(p.participant.vars["scenarios"])
-        else:
-            p.participant.vars["scenarios"] = Constants.scenarios_no_insurance.copy()
-            random.shuffle(p.participant.vars["scenarios"])
+        print("to ", p.participant.vars["treatment"])
 
     def save_payoff_bret(self):
 
@@ -715,7 +589,9 @@ class Player(BasePlayer):
                 'payoff_risk2': self.participant.vars["payoff_risk2"]}
 
     def vars_for_earnings(self):
+
         input = False
+
         return {
             'input':            input,
             'reset':            True,
@@ -727,6 +603,7 @@ class Player(BasePlayer):
             'total_earnings':   Constants.total_earnings,
             'boxes_total':      Constants.num_rows * Constants.num_cols,
             'boxes_collected':  self.boxes_collected,
+
         }
 
     def vars_for_BRET(self):
@@ -832,7 +709,7 @@ class Player(BasePlayer):
         self.participant.vars["payoff_additional"] = payoff_additional
         payoff_risk = "€" + str(participant.vars["payoff_risk"])
         payoff_risk2 = "€" + str(participant.vars["payoff_risk2"])
-        payoff_BRET = "€" + str(self.payoff_BRET)
+        payoff_BRET = "€" + self.payoff_BRET
 
         return {'payoff_additional': payoff_additional, 'payoff_risk': payoff_risk,
                 'payoff_risk2': payoff_risk2, 'payoff_BRET': payoff_BRET,
@@ -1045,7 +922,7 @@ class Player(BasePlayer):
 
     def set_payoff(self):
 
-        if not self.mitigate:  # set premium for first year
+        if self.mitigate == None:  # set premium for first year
             self.participant.vars["premium"] = c((1 - self.deductible) * float(self.risk) * 0.01 * Constants.damage)
         elif self.mitigate > 0:  # mitigated this scenario
             if not self.has_discount:
@@ -1130,7 +1007,7 @@ class Player(BasePlayer):
         self.payoff_scenario6 = float(self.participant.vars["payoff_scenario6"])
         self.payoff_scenario_risk = float(self.participant.vars["payoff_risk"])
         self.payoff_scenario_risk2 = float(self.participant.vars["payoff_risk2"])
-        self.payoff_scenario_time = float(self.participant.vars["payoff_time"])
+        self.payoff_scenario_time = self.participant.vars["payoff_time"]
 
         if self.participant.vars["selected_scenario"] == 1:
             self.participant.payoff = self.payoff_scenario1*0.01

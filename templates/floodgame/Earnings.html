@@ -18,9 +18,6 @@
 {% block scripts %}
 
 
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
-   rel="stylesheet">
-
 
     <script type="text/javascript">
         var minutesLabel = document.getElementById("minutes_2");
@@ -143,6 +140,7 @@ Collect your money
                                         'width':bombTaskController.width,
                                         'height':bombTaskController.height
                                     }">
+                                    <span class="icon glyphicon glyphicon-ok"></span>
                                 </span>
                                 <span
                                     class="back"
@@ -150,8 +148,8 @@ Collect your money
                                         'width':bombTaskController.width,
                                         'height':bombTaskController.height
                                     }">
-                                    <i class="material-icons glyphicon-euro">euro_symbol</i>
-                                    <i class="material-icons glyphicon-remove">clear</i>
+                                    <span class="icon glyphicon glyphicon-euro"></span>
+                                    <span class="icon glyphicon glyphicon-remove"></span>
                                 </span>
 
                             </div>
@@ -239,7 +237,7 @@ Please collect more money
     <p>Time spent collecting money:
 
         <span style="font-weight: bold">
-            <i class="material-icons black">timer</i>
+            <span class="glyphicon glyphicon-time"></span>
             <span id="minutes_2"></span>:<span id="seconds_2"></span>
         </span>
     </p>

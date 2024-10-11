@@ -2,7 +2,7 @@
  * BOMBTASK STYLES
  *
  * @author Armin Pfurtscheller
- * @license MIT ja hier
+ * @license MIT
  */
 
 
@@ -26,7 +26,6 @@
 
 /** ROWS */
 #bomb-task .col{
-	width: 30px;
 	padding: 5px;
  	display: table-cell;
 }

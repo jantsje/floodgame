@@ -460,9 +460,9 @@
 				var columns = [];
 				for( var j=0; j<this.cols; j++ )
 				{
-					var data = {
-						row: i+1,
-						col: j+1
+					var data = { 
+						row: i+1, 
+						col: j+1 
 					};
 
 					columns.push(data);
